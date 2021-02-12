@@ -1,0 +1,9 @@
+[package]
+name = "csvquery-rs"
+version = "0.1.0"
+authors = ["Li Yazhou <me.ssword@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+thiserror = "1.0"
+sqlparser = "0.8"
