@@ -1,4 +1,4 @@
-mod table_data;
+mod datablock;
 mod error;
 mod query;
 
