@@ -1,7 +1,5 @@
-mod data_cell;
-mod data_row;
 mod data_schema;
-mod data_type;
-mod data_set;
+mod data_block;
+mod data_array;
 
-pub use self::data_set::DataSet;
+pub use self::data_block::DataBlockRef;
