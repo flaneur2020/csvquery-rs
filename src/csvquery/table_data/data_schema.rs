@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::csvquery::data_type::DataType;
+use super::data_type::DataType;
 
 #[derive(Debug)]
 pub struct DataSchema {
