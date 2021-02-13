@@ -60,3 +60,29 @@ impl ProjectionPlan {
         })
     }
 }
+
+impl ILogicalPlan for ProjectionPlan {
+    fn schema(&self) -> DataSchemaRef {
+        self.schema.clone()
+    }
+}
+
+pub struct SelectionPlan {
+    input: LogicalPlanRef,
+    expr: LogicalExpr,
+}
+
+impl SelectionPlan {
+    pub fn new(input: LogicalPlanRef, expr: LogicalExpr) -> CSVQueryResult<Self> {
+        Ok(Self {
+            input: input,
+            expr: expr,
+        })
+    }
+}
+
+impl ILogicalPlan for SelectionPlan {
+    fn schema(&self) -> DataSchemaRef {
+        self.input.schema().clone()
+    }
+}
