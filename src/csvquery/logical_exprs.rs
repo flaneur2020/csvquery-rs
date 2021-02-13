@@ -45,6 +45,7 @@ impl std::fmt::Display for BinaryExprOP {
     }
 }
 
+#[derive(Debug)]
 pub enum LogicalExpr {
     ColumnExpr { name: String },
     LiteralStringExpr { str: String },
@@ -62,7 +63,7 @@ pub enum LogicalExpr {
 }
 
 impl LogicalExpr {
-    fn to_field(&self, input: LogicalPlanRef) -> CSVQueryResult<DataField> {
+    pub fn to_field(&self, input: LogicalPlanRef) -> CSVQueryResult<DataField> {
         match self {
             LogicalExpr::ColumnExpr{ ref name } => {
                 let schema = input.schema().clone();
