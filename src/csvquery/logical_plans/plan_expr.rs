@@ -1,7 +1,8 @@
+use crate::csvquery::logical_plans::PlanNodeRef;
 use crate::csvquery::data_schema::{DataField, DataType};
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use crate::csvquery::logical_plans::LogicalPlanRef;
 use std::fmt;
+use std::sync::Arc;
 
 #[derive(Debug, Copy, Clone)]
 pub enum BinaryExprOP {
@@ -46,7 +47,7 @@ impl std::fmt::Display for BinaryExprOP {
 }
 
 #[derive(Debug)]
-pub enum LogicalExpr {
+pub enum PlanExpr {
     ColumnExpr {
         name: String,
     },
@@ -59,19 +60,19 @@ pub enum LogicalExpr {
     BinaryExpr {
         name: String,
         op: BinaryExprOP,
-        left: Box<LogicalExpr>,
-        right: Box<LogicalExpr>,
+        left: Arc<PlanExpr>,
+        right: Arc<PlanExpr>,
     },
     AggregateExpr {
         name: String,
-        expr: Box<LogicalExpr>,
+        expr: Arc<PlanExpr>,
     },
 }
 
-impl LogicalExpr {
-    pub fn to_field(&self, input: LogicalPlanRef) -> CSVQueryResult<DataField> {
+impl PlanExpr {
+    pub fn to_field(&self, input: PlanNodeRef) -> CSVQueryResult<DataField> {
         match self {
-            LogicalExpr::ColumnExpr { ref name } => {
+            PlanExpr::ColumnExpr { ref name } => {
                 let schema = input.schema().clone();
                 let field = schema
                     .find_field(&name)
@@ -79,44 +80,42 @@ impl LogicalExpr {
                 Ok(field.clone())
             }
 
-            LogicalExpr::LiteralStringExpr { ref str } => {
+            PlanExpr::LiteralStringExpr { ref str } => {
                 Ok(DataField::new(str.clone(), DataType::String))
             }
 
-            LogicalExpr::LiteralLongExpr { ref n } => {
-                Ok(DataField::new(n.clone(), DataType::Int64))
-            }
+            PlanExpr::LiteralLongExpr { ref n } => Ok(DataField::new(n.clone(), DataType::Int64)),
 
-            LogicalExpr::BinaryExpr {
+            PlanExpr::BinaryExpr {
                 name,
                 op,
                 left,
                 right,
-            } => Self::convert_binary_expr_to_field(input, name.clone(), op.clone(), left, right),
+            } => convert_binary_expr_to_field(input, name.clone(), op.clone(), left, right),
 
-            LogicalExpr::AggregateExpr { name, expr } => Ok(DataField::new(
+            PlanExpr::AggregateExpr { name, expr } => Ok(DataField::new(
                 name.clone(),
                 expr.to_field(input)?.data_type,
             )),
         }
     }
+}
 
-    fn convert_binary_expr_to_field(
-        input: LogicalPlanRef,
-        name: String,
-        op: BinaryExprOP,
-        left: &LogicalExpr,
-        right: &LogicalExpr,
-    ) -> CSVQueryResult<DataField> {
-        use BinaryExprOP::*;
+fn convert_binary_expr_to_field(
+    input: PlanNodeRef,
+    name: String,
+    op: BinaryExprOP,
+    left: &PlanExpr,
+    right: &PlanExpr,
+) -> CSVQueryResult<DataField> {
+    use BinaryExprOP::*;
 
-        match op {
-            Eq | Neq | Gt | Gte | Lt | Lte => Ok(DataField::new(op.to_string(), DataType::Boolean)),
-            And | Or => Ok(DataField::new(op.to_string(), DataType::Boolean)),
-            Add | Sub | Mult | Div | Mod => Ok(DataField::new(
-                op.to_string(),
-                left.to_field(input)?.data_type,
-            )),
+    match op {
+        Eq | Neq | Gt | Gte | Lt | Lte => Ok(DataField::new(op.to_string(), DataType::Boolean)),
+        And | Or => Ok(DataField::new(op.to_string(), DataType::Boolean)),
+        Add | Sub | Mult | Div | Mod => {
+            let data_type = left.to_field(input)?.data_type;
+            Ok(DataField::new(op.to_string(), data_type))
         }
     }
 }
