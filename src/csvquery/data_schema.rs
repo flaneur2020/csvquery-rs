@@ -15,6 +15,15 @@ pub struct DataField {
     data_type: DataType,
 }
 
+impl DataField {
+    pub fn new(name: String, data_type: DataType) -> Self {
+        Self {
+            name: name,
+            data_type: data_type,
+        }
+    }
+}
+
 pub type DataSchemaRef = Arc<DataSchema>;
 
 #[derive(Debug)]
@@ -29,7 +38,7 @@ impl DataSchema {
         }
     }
 
-    fn find_field(&self, field_name: &str) -> Option<&DataField> {
+    pub fn find_field(&self, field_name: &str) -> Option<&DataField> {
         self.fields
             .iter()
             .find(|&f| f.name == *field_name)
