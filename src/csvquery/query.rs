@@ -1,5 +1,5 @@
 use crate::csvquery::error::CSVQueryError;
-use crate::csvquery::datablock::DataBlockRef;
+use crate::csvquery::data_block::DataBlockRef;
 
 pub struct CSVQueryExecutor<'a> {
     sql: &'a str,

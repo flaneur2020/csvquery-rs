@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use super::data_array::DataArrayRef;
-use super::data_schema::DataSchemaRef;
+use crate::csvquery::data_schema::DataSchemaRef;
 
 pub type DataBlockRef = Arc<DataBlock>;
 
@@ -8,5 +8,5 @@ pub type DataBlockRef = Arc<DataBlock>;
 pub struct DataBlock {
     schema: DataSchemaRef,
     columns: Vec<DataArrayRef>,
-    length: u64,
+    rows_count: u64,
 }
