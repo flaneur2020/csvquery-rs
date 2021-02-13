@@ -38,14 +38,4 @@ impl DataSchema {
     pub fn find_field(&self, field_name: &str) -> Option<&DataField> {
         self.fields.iter().find(|&f| f.name == *field_name)
     }
-
-    pub fn select(&self, projections: &Vec<String>) -> DataSchemaRef {
-        let mut new_fields: Vec<DataField> = Vec::new();
-        for projection in projections.iter() {
-            let field = self.find_field(projection).unwrap();
-            new_fields.push(field.clone());
-        }
-        let new_schema = DataSchema::new(new_fields);
-        Arc::new(new_schema)
-    }
 }
