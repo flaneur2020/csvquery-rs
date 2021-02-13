@@ -11,6 +11,9 @@ pub enum CSVQueryError {
     #[error("Field Not Found: {0}")]
     FieldNotFound(String),
 
+    #[error("Not Implemented: {0}")]
+    NotImplemented(String),
+
     #[error("Internal Error: {0}")]
     Internal(String),
 }

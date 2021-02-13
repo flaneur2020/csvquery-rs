@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::csvquery::data_schema::DataSchemaRef;
 use crate::csvquery::data_sources::DataSourceRef;
-use crate::csvquery::logical_exprs::LogicalExprRef;
+use crate::csvquery::logical_exprs::LogicalExpr;
 
 pub type LogicalPlanRef = Arc<Box<dyn ILogicalPlan>>;
 
@@ -47,7 +47,7 @@ pub struct Projection {
 }
 
 impl Projection {
-    pub fn new(input: LogicalPlanRef, exprs: Vec<LogicalExprRef>) {
+    pub fn new(input: LogicalPlanRef, exprs: Vec<LogicalExpr>) {
 
     }
 }

@@ -4,15 +4,16 @@ use crate::csvquery::error::CSVQueryError;
 
 #[derive(Debug, Copy, Clone)]
 pub enum DataType {
-    Int,
-    Float,
+    Int64,
+    Float64,
     String,
+    Boolean,
 }
 
 #[derive(Debug, Clone)]
 pub struct DataField {
-    name: String,
-    data_type: DataType,
+    pub name: String,
+    pub data_type: DataType,
 }
 
 impl DataField {
