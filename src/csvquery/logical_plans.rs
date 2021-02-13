@@ -49,9 +49,7 @@ pub struct ProjectionPlan {
 
 impl ProjectionPlan {
     pub fn new(input: LogicalPlanRef, exprs: Vec<LogicalExpr>) -> CSVQueryResult<Self> {
-        let fields = exprs.iter()
-            .map(|e| e.to_field(input.clone()))
-            .collect::<CSVQueryResult<Vec<DataField>>>()?;
+        let fields = exprs_to_fields(input.clone(), &exprs)?;
         let schema = Arc::new(DataSchema::new(fields));
 
         Ok(Self {
@@ -85,4 +83,40 @@ impl ILogicalPlan for SelectionPlan {
     fn schema(&self) -> DataSchemaRef {
         self.input.schema().clone()
     }
+}
+
+pub struct AggregatePlan {
+    input: LogicalPlanRef,
+    group_exprs: Vec<LogicalExpr>,
+    aggregate_exprs: Vec<LogicalExpr>,
+    schema: DataSchemaRef,
+}
+
+impl AggregatePlan {
+    pub fn new(input: LogicalPlanRef, group_exprs: Vec<LogicalExpr>, aggregate_exprs: Vec<LogicalExpr>) -> CSVQueryResult<Self> {
+        let group_fields = exprs_to_fields(input.clone(), &group_exprs)?;
+        let mut aggregate_fields = exprs_to_fields(input.clone(), &aggregate_exprs)?;
+        let mut all_fields = group_fields;
+        all_fields.append(&mut aggregate_fields);
+        let schema = Arc::new(DataSchema::new(all_fields));
+
+        return Ok(Self {
+            input: input,
+            group_exprs: group_exprs,
+            aggregate_exprs: aggregate_exprs,
+            schema: schema,
+        })
+    }
+}
+
+impl ILogicalPlan for AggregatePlan {
+    fn schema(&self) -> DataSchemaRef {
+        self.schema.clone()
+    }
+}
+
+fn exprs_to_fields(input: LogicalPlanRef, exprs: &Vec<LogicalExpr>) -> CSVQueryResult<Vec<DataField>> {
+    exprs.iter()
+        .map(|e| e.to_field(input.clone()))
+        .collect::<CSVQueryResult<Vec<DataField>>>()
 }
