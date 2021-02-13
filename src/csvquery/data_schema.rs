@@ -9,27 +9,39 @@ pub enum DataType {
     String,
 }
 
+#[derive(Debug, Clone)]
+pub struct DataField {
+    name: String,
+    data_type: DataType,
+}
+
 pub type DataSchemaRef = Arc<DataSchema>;
 
 #[derive(Debug)]
 pub struct DataSchema {
-    columns: HashMap<String, DataType>,
+    fields: Vec<DataField>,
 }
 
 impl DataSchema {
-    pub fn new(columns: HashMap<String, DataType>) -> Self {
+    pub fn new(fields: Vec<DataField>) -> Self {
         return Self {
-            columns: columns,
+            fields: fields,
         }
     }
 
+    fn find_field(&self, field_name: &str) -> Option<&DataField> {
+        self.fields
+            .iter()
+            .find(|&f| f.name == *field_name)
+    }
+
     pub fn select(&self, projections: &Vec<String>) -> DataSchemaRef {
-        let mut new_columns: HashMap<String, DataType> = HashMap::new();
+        let mut new_fields: Vec<DataField> = Vec::new();
         for projection in projections.iter() {
-            let data_type = self.columns.get(projection).unwrap();
-            new_columns.insert(projection.clone(), data_type.clone());
+            let field = self.find_field(projection).unwrap();
+            new_fields.push(field.clone());
         }
-        let new_schema = DataSchema::new(new_columns);
+        let new_schema = DataSchema::new(new_fields);
         return Arc::new(new_schema);
     }
 }
