@@ -1,6 +1,4 @@
 use std::sync::Arc;
-use std::collections::HashMap;
-use crate::csvquery::error::CSVQueryError;
 
 #[derive(Debug, Copy, Clone)]
 pub enum DataType {
@@ -34,15 +32,11 @@ pub struct DataSchema {
 
 impl DataSchema {
     pub fn new(fields: Vec<DataField>) -> Self {
-        return Self {
-            fields: fields,
-        }
+        Self { fields }
     }
 
     pub fn find_field(&self, field_name: &str) -> Option<&DataField> {
-        self.fields
-            .iter()
-            .find(|&f| f.name == *field_name)
+        self.fields.iter().find(|&f| f.name == *field_name)
     }
 
     pub fn select(&self, projections: &Vec<String>) -> DataSchemaRef {
@@ -52,6 +46,6 @@ impl DataSchema {
             new_fields.push(field.clone());
         }
         let new_schema = DataSchema::new(new_fields);
-        return Arc::new(new_schema);
+        Arc::new(new_schema)
     }
 }

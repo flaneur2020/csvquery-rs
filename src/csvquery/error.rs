@@ -1,5 +1,5 @@
-use std::result;
 use sqlparser::parser::ParserError;
+use std::result;
 
 pub type CSVQueryResult<T> = result::Result<T, CSVQueryError>;
 

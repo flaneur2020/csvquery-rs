@@ -1,5 +1,5 @@
-use crate::csvquery::error::CSVQueryError;
 use crate::csvquery::data_block::DataBlockRef;
+use crate::csvquery::error::CSVQueryError;
 
 pub struct CSVQueryExecutor<'a> {
     sql: &'a str,
@@ -7,9 +7,7 @@ pub struct CSVQueryExecutor<'a> {
 
 impl<'a> CSVQueryExecutor<'a> {
     pub fn new(sql: &'a str) -> Self {
-        Self {
-            sql: sql,
-        }
+        Self { sql: sql }
     }
 
     pub fn execute(&self) -> Result<DataBlockRef, CSVQueryError> {

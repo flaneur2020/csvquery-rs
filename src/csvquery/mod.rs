@@ -1,9 +1,9 @@
 mod data_block;
-mod data_sources;
 mod data_schema;
-mod logical_plans;
-mod logical_exprs;
+mod data_sources;
 mod error;
+mod logical_exprs;
+mod logical_plans;
 mod query;
 
 pub use self::query::CSVQueryExecutor;

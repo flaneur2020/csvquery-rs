@@ -1,8 +1,8 @@
-use std::sync::Arc;
-use crate::csvquery::error::CSVQueryResult;
-use crate::csvquery::data_schema::{DataSchemaRef, DataSchema, DataField};
+use crate::csvquery::data_schema::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSourceRef;
+use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::logical_exprs::LogicalExpr;
+use std::sync::Arc;
 
 pub type LogicalPlanRef = Arc<Box<dyn ILogicalPlan>>;
 
@@ -18,7 +18,11 @@ pub struct ScanPlan {
 }
 
 impl ScanPlan {
-    pub fn new(path: String, data_source: DataSourceRef, projections: Vec<String>) -> CSVQueryResult<Self> {
+    pub fn new(
+        path: String,
+        data_source: DataSourceRef,
+        projections: Vec<String>,
+    ) -> CSVQueryResult<Self> {
         let schema = Self::derive_schema(data_source.schema().clone(), &projections);
         Ok(Self {
             path: path,
@@ -93,7 +97,11 @@ pub struct AggregatePlan {
 }
 
 impl AggregatePlan {
-    pub fn new(input: LogicalPlanRef, group_exprs: Vec<LogicalExpr>, aggregate_exprs: Vec<LogicalExpr>) -> CSVQueryResult<Self> {
+    pub fn new(
+        input: LogicalPlanRef,
+        group_exprs: Vec<LogicalExpr>,
+        aggregate_exprs: Vec<LogicalExpr>,
+    ) -> CSVQueryResult<Self> {
         let group_fields = exprs_to_fields(input.clone(), &group_exprs)?;
         let mut aggregate_fields = exprs_to_fields(input.clone(), &aggregate_exprs)?;
         let mut all_fields = group_fields;
@@ -105,7 +113,7 @@ impl AggregatePlan {
             group_exprs: group_exprs,
             aggregate_exprs: aggregate_exprs,
             schema: schema,
-        })
+        });
     }
 }
 
@@ -115,8 +123,12 @@ impl ILogicalPlan for AggregatePlan {
     }
 }
 
-fn exprs_to_fields(input: LogicalPlanRef, exprs: &Vec<LogicalExpr>) -> CSVQueryResult<Vec<DataField>> {
-    exprs.iter()
+fn exprs_to_fields(
+    input: LogicalPlanRef,
+    exprs: &Vec<LogicalExpr>,
+) -> CSVQueryResult<Vec<DataField>> {
+    exprs
+        .iter()
         .map(|e| e.to_field(input.clone()))
         .collect::<CSVQueryResult<Vec<DataField>>>()
 }

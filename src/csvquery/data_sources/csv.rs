@@ -1,4 +1,3 @@
 use super::IDataSource;
 
-pub struct CSVDataSource {
-}
+pub struct CSVDataSource {}
