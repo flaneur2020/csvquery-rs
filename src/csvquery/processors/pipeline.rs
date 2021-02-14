@@ -9,6 +9,7 @@ pub struct Pipeline {
     processors: Vec<Pipe>,
 }
 
+/// pipeline contains a sequence of simple transforms
 impl Pipeline {
     pub fn new() -> Self {
         Pipeline { processors: vec![] }
