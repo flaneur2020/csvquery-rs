@@ -1,6 +1,6 @@
 use crate::csvquery::data_sources::CSVDataSource;
 use crate::csvquery::error::CSVQueryResult;
-use crate::csvquery::logical_plans::{
+use crate::csvquery::plans::{
     AggregatePlan, PlanExpr, PlanNode, PlanNodeRef, ProjectionPlan, ScanPlan, SelectionPlan,
 };
 use std::sync::Arc;

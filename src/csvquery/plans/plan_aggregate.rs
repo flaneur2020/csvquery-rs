@@ -1,6 +1,6 @@
 use crate::csvquery::data_schema::{DataSchema, DataSchemaRef};
 use crate::csvquery::error::CSVQueryResult;
-use crate::csvquery::logical_plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
+use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::sync::Arc;
 
 pub struct AggregatePlan {

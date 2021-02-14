@@ -1,6 +1,6 @@
 use crate::csvquery::data_schema::DataSchemaRef;
 use crate::csvquery::error::CSVQueryResult;
-use crate::csvquery::logical_plans::{PlanExpr, PlanNodeRef};
+use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
 
 pub struct SelectionPlan {
     input: PlanNodeRef,

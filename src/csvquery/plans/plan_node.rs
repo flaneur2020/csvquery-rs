@@ -1,5 +1,5 @@
 use crate::csvquery::data_schema::DataSchemaRef;
-use crate::csvquery::logical_plans::{AggregatePlan, ProjectionPlan, ScanPlan, SelectionPlan};
+use crate::csvquery::plans::{AggregatePlan, ProjectionPlan, ScanPlan, SelectionPlan};
 use std::sync::Arc;
 
 pub type PlanNodeRef = Arc<PlanNode>;
