@@ -4,4 +4,4 @@ mod stream_transformed;
 
 pub use stream::DataBlockStream;
 pub use stream_channel::ChannelStream;
-pub use stream_transformed::{TransformedStream, TransformFunc};
+pub use stream_transformed::{TransformFunc, TransformedStream};
