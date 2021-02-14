@@ -1,7 +1,7 @@
-use std::sync::Arc;
-use crate::csvquery::data_schema::{DataSchemaRef, DataSchema, DataField};
+use crate::csvquery::data_schema::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSourceRef;
-use crate::csvquery::error::{CSVQueryResult, CSVQueryError};
+use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use std::sync::Arc;
 
 pub struct ScanPlan {
     path: String,
@@ -25,16 +25,19 @@ impl ScanPlan {
         })
     }
 
-    fn derive_schema(base_schema: DataSchemaRef, projections: &Vec<String>) -> CSVQueryResult<DataSchemaRef> {
+    fn derive_schema(
+        base_schema: DataSchemaRef,
+        projections: &Vec<String>,
+    ) -> CSVQueryResult<DataSchemaRef> {
         if projections.len() == 0 {
             return Ok(base_schema);
         }
 
         let mut new_fields: Vec<DataField> = Vec::new();
         for projection in projections.iter() {
-            let field = base_schema.find_field(projection).ok_or_else(||
-                CSVQueryError::FieldNotFound(projection.clone())
-            )?;
+            let field = base_schema
+                .find_field(projection)
+                .ok_or_else(|| CSVQueryError::FieldNotFound(projection.clone()))?;
             new_fields.push(field.clone());
         }
 
