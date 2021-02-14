@@ -1,4 +1,4 @@
-use crate::csvquery::data_block::DataBlockChannel;
+use crate::csvquery::data_streams::DataBlockStream;
 use crate::csvquery::error::CSVQueryResult;
 use async_trait::async_trait;
 use std::sync::Arc;
@@ -11,5 +11,5 @@ pub trait IProcessor: Sync + Send {
 
     fn connect_to(&mut self, input: ProcessorRef) -> CSVQueryResult<()>;
 
-    async fn execute(&self) -> CSVQueryResult<DataBlockChannel>;
+    async fn execute(&self) -> CSVQueryResult<DataBlockStream>;
 }

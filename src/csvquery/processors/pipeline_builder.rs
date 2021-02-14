@@ -1,4 +1,4 @@
-use crate::csvquery::plans::{PlanNodeRef};
+use crate::csvquery::plans::PlanNodeRef;
 
 pub struct PipelineBuilder {
     plan: PlanNodeRef,

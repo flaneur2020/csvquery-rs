@@ -1,7 +1,7 @@
+use crate::csvquery::data_streams::DataBlockStream;
+use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use crate::csvquery::processors::{IProcessor, MergeProcessor, ProcessorRef};
 use std::sync::Arc;
-use crate::csvquery::error::{CSVQueryResult, CSVQueryError};
-use crate::csvquery::data_block::{DataBlockChannel};
-use crate::csvquery::processors::{ProcessorRef, IProcessor, MergeProcessor};
 
 pub type Pipe = Vec<ProcessorRef>;
 
@@ -70,10 +70,11 @@ impl Pipeline {
         Ok(())
     }
 
-    pub async fn execute(&mut self) -> CSVQueryResult<DataBlockChannel> {
-        let last = self.processors.last().ok_or_else(|| {
-            CSVQueryError::Internal("Can't execute empty pipeline".to_string())
-        })?;
+    pub async fn execute(&mut self) -> CSVQueryResult<DataBlockStream> {
+        let last = self
+            .processors
+            .last()
+            .ok_or_else(|| CSVQueryError::Internal("Can't execute empty pipeline".to_string()))?;
 
         if last.len() > 1 {
             self.merge_processor()?;

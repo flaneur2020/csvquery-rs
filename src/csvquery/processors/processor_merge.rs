@@ -1,11 +1,13 @@
+use crate::csvquery::data_block::DataBlock;
+use crate::csvquery::data_streams::{DataBlockStream, ChannelStream};
+use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use crate::csvquery::processors::{IProcessor, ProcessorRef};
+use futures::StreamExt;
 use async_trait::async_trait;
 use tokio::sync::mpsc;
-use crate::csvquery::processors::{IProcessor, ProcessorRef};
-use crate::csvquery::data_block::{DataBlockChannel, DataBlock};
-use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 
 pub struct MergeProcessor {
-    inputs: Vec<ProcessorRef>
+    inputs: Vec<ProcessorRef>,
 }
 
 impl MergeProcessor {
@@ -25,10 +27,12 @@ impl IProcessor for MergeProcessor {
         Ok(())
     }
 
-    async fn execute(&self) -> CSVQueryResult<DataBlockChannel> {
+    async fn execute(&self) -> CSVQueryResult<DataBlockStream> {
         let num_inputs = self.inputs.len();
         match num_inputs {
-            0 => Err(CSVQueryError::Internal("Can not merge empty processor list".to_string())),
+            0 => Err(CSVQueryError::Internal(
+                "Can not merge empty processor list".to_string(),
+            )),
             1 => self.inputs[0].execute().await,
             _ => {
                 let (sender, receiver) = mpsc::channel::<CSVQueryResult<DataBlock>>(num_inputs);
@@ -37,21 +41,21 @@ impl IProcessor for MergeProcessor {
                     let sender = sender.clone();
 
                     tokio::spawn(async move {
-                        let mut channel = match input.execute().await {
+                        let mut stream = match input.execute().await {
                             Err(e) => {
                                 sender.send(Err(e)).await.ok();
-                                return
-                            },
+                                return;
+                            }
                             Ok(stream) => stream,
                         };
 
-                        while let Some(item) = channel.recv().await {
+                        while let Some(item) = stream.next().await {
                             sender.send(item).await.ok();
                         }
                     });
                 }
 
-                Ok(receiver)
+                Ok(Box::pin(ChannelStream::new(receiver)))
             }
         }
     }
