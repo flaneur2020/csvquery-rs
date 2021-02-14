@@ -1,9 +1,9 @@
 use crate::csvquery::data_block::DataBlock;
-use crate::csvquery::data_streams::{DataBlockStream, ChannelStream};
+use crate::csvquery::data_streams::{ChannelStream, DataBlockStream};
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use crate::csvquery::processors::{IProcessor, ProcessorRef};
-use futures::StreamExt;
 use async_trait::async_trait;
+use futures::StreamExt;
 use tokio::sync::mpsc;
 
 pub struct MergeProcessor {

@@ -11,6 +11,12 @@ pub struct TransformedStream {
     func: TransformFunc,
 }
 
+impl TransformedStream {
+    pub fn new(input: DataBlockStream, func: TransformFunc) -> Self {
+        Self { input, func }
+    }
+}
+
 impl Stream for TransformedStream {
     type Item = CSVQueryResult<DataBlock>;
 
