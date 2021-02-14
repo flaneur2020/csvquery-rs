@@ -1,4 +1,5 @@
 use crate::csvquery::processors::ProcessorRef;
+use crate::csvquery::error::CSVQueryResult;
 
 pub type Pipe = Vec<ProcessorRef>;
 
@@ -15,5 +16,9 @@ impl Pipeline {
     }
 
     pub fn add_simple_transform(&mut self, processor: ProcessorRef) {
+    }
+
+    pub async fn execute(&self) -> CSVQueryResult<()> {
+        Ok(())
     }
 }
