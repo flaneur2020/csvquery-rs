@@ -4,7 +4,7 @@ use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::sync::Arc;
 
 pub struct AggregatePlan {
-    input: PlanNodeRef,
+    pub input: PlanNodeRef,
     group_exprs: Vec<PlanExpr>,
     aggregate_exprs: Vec<PlanExpr>,
     schema: DataSchemaRef,

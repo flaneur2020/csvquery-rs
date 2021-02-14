@@ -3,7 +3,7 @@ use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
 
 pub struct SelectionPlan {
-    input: PlanNodeRef,
+    pub input: PlanNodeRef,
     expr: PlanExpr,
 }
 

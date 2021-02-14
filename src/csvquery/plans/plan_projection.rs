@@ -4,7 +4,7 @@ use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::sync::Arc;
 
 pub struct ProjectionPlan {
-    input: PlanNodeRef,
+    pub input: PlanNodeRef,
     schema: DataSchemaRef,
 }
 
