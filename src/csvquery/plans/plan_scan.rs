@@ -4,9 +4,9 @@ use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use std::sync::Arc;
 
 pub struct ScanPlan {
-    path: String,
-    data_source: DataSourceRef,
-    projections: Vec<String>,
+    pub path: String,
+    pub data_source: DataSourceRef,
+    pub projections: Vec<String>,
     schema: DataSchemaRef,
 }
 

@@ -11,7 +11,7 @@ pub struct PlanBuilder {
 
 impl PlanBuilder {
     pub fn csv(path: String) -> CSVQueryResult<Self> {
-        let data_source = Arc::new(CSVDataSource::new(path.clone()));
+        let data_source = Arc::new(CSVDataSource::open(path.clone())?);
         let plan = ScanPlan::new(path.clone(), data_source, vec![])?;
         let plan_ref = Arc::new(PlanNode::ScanPlan(plan));
         Ok(Self::new(plan_ref))

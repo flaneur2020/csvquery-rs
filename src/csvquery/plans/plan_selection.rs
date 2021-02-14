@@ -4,7 +4,7 @@ use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
 
 pub struct SelectionPlan {
     pub input: PlanNodeRef,
-    expr: PlanExpr,
+    pub expr: PlanExpr,
 }
 
 impl SelectionPlan {
