@@ -1,10 +1,11 @@
-use super::data_array::DataArrayRef;
+use crate::csvquery::data_block::DataArrayRef;
 use crate::csvquery::data_schema::DataSchemaRef;
-use std::sync::Arc;
+use crate::csvquery::error::CSVQueryResult;
+use tokio::sync::mpsc::Receiver;
 
-pub type DataBlockRef = Arc<DataBlock>;
+pub type DataBlockChannel = Receiver<CSVQueryResult<DataBlock>>;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DataBlock {
     schema: DataSchemaRef,
     columns: Vec<DataArrayRef>,

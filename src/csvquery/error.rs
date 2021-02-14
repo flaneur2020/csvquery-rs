@@ -3,7 +3,7 @@ use std::result;
 
 pub type CSVQueryResult<T> = result::Result<T, CSVQueryError>;
 
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, Clone)]
 pub enum CSVQueryError {
     #[error("SQLParser Error: {0}")]
     SQLParser(#[from] ParserError),
