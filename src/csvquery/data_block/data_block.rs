@@ -8,5 +8,4 @@ pub type DataBlockRef = Arc<DataBlock>;
 pub struct DataBlock {
     schema: DataSchemaRef,
     columns: Vec<DataArrayRef>,
-    rows_count: u64,
 }
