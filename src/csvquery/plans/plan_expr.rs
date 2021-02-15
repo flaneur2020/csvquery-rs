@@ -81,11 +81,9 @@ impl PlanExpr {
                 Ok(DataField::new(&(n.clone()), DataType::Int64, false))
             }
 
-            PlanExpr::BinaryExpr {
-                op,
-                left,
-                right,
-            } => convert_binary_expr_to_field(input, op.clone(), left, right),
+            PlanExpr::BinaryExpr { op, left, right } => {
+                convert_binary_expr_to_field(input, op.clone(), left, right)
+            }
 
             PlanExpr::AggregateExpr { name, expr } => Ok(DataField::new(
                 &name.clone(),

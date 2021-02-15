@@ -1,5 +1,5 @@
-use crate::csvquery::data_types::DataBlock;
 use crate::csvquery::data_streams::DataBlockStream;
+use crate::csvquery::data_types::DataBlock;
 use crate::csvquery::error::CSVQueryResult;
 use futures::{Stream, StreamExt};
 use std::task::{Context, Poll};

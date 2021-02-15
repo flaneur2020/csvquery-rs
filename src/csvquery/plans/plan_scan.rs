@@ -1,8 +1,8 @@
-use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSourceRef;
+use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use std::sync::Arc;
 use std::fmt;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct ScanPlan {
@@ -12,11 +12,7 @@ pub struct ScanPlan {
 }
 
 impl ScanPlan {
-    pub fn new(
-        path: &str,
-        data_source: DataSourceRef,
-        projections: Vec<String>,
-    ) -> Self {
+    pub fn new(path: &str, data_source: DataSourceRef, projections: Vec<String>) -> Self {
         Self {
             path: path.to_string(),
             data_source: data_source,

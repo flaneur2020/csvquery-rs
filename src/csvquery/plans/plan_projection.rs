@@ -1,8 +1,8 @@
 use crate::csvquery::data_types::{DataSchema, DataSchemaRef};
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
-use std::sync::Arc;
 use std::fmt;
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct ProjectionPlan {
@@ -31,16 +31,17 @@ impl fmt::Display for ProjectionPlan {
 
         match self.schema() {
             Ok(schema) => {
-                let field_names = schema.fields()
+                let field_names = schema
+                    .fields()
                     .iter()
-                    .map(|f| f.name().to_string() )
+                    .map(|f| f.name().to_string())
                     .collect::<Vec<String>>();
                 write!(f, "{}", field_names.join(", "))?;
             }
             Err(err) => {
                 write!(f, "Err {}", err);
             }
-       }
+        }
         Ok(())
     }
 }

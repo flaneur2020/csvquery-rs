@@ -1,8 +1,8 @@
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use crate::csvquery::plans::{AggregatePlan, ProjectionPlan, ScanPlan, SelectionPlan, PlanVisitor};
-use std::sync::Arc;
+use crate::csvquery::plans::{AggregatePlan, PlanVisitor, ProjectionPlan, ScanPlan, SelectionPlan};
 use std::fmt;
+use std::sync::Arc;
 
 pub type PlanNodeRef = Arc<PlanNode>;
 
@@ -24,10 +24,7 @@ impl PlanNode {
         }
     }
 
-    pub fn visit<V: PlanVisitor>(
-        &self,
-        visitor: &mut V
-    ) -> std::result::Result<bool, V::Error> {
+    pub fn visit<V: PlanVisitor>(&self, visitor: &mut V) -> std::result::Result<bool, V::Error> {
         if !visitor.pre_visit(self)? {
             return Ok(false);
         }
@@ -89,13 +86,13 @@ impl PlanNode {
 
 impl fmt::Display for PlanNode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match(self) {
+        match (self) {
             PlanNode::Scan(plan) => write!(f, "{}", plan)?,
             PlanNode::Projection(plan) => write!(f, "{}", plan)?,
             PlanNode::Selection(plan) => write!(f, "{}", plan)?,
             PlanNode::Aggregate(plan) => write!(f, "{}", plan)?,
         }
-        
+
         Ok(())
     }
 }

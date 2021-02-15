@@ -1,6 +1,6 @@
-use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSource;
 use crate::csvquery::data_streams::{DataBlockStream, EmptyStream};
+use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::error::CSVQueryResult;
 use std::sync::Arc;
 
@@ -10,7 +10,9 @@ pub struct CSVDataSource {
 
 impl CSVDataSource {
     pub fn open(path: &str) -> CSVQueryResult<Self> {
-        Ok(Self { path: path.to_string() })
+        Ok(Self {
+            path: path.to_string(),
+        })
     }
 }
 
