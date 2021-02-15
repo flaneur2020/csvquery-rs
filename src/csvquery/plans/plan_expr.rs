@@ -96,10 +96,9 @@ fn convert_binary_expr_to_field(
     use BinaryExprOP::*;
 
     match op {
-        Eq | Neq | Gt | Gte | Lt | Lte => {
+        Eq | Neq | Gt | Gte | Lt | Lte  | And | Or => {
             Ok(DataField::new(&op.to_string(), DataType::Boolean, false))
         }
-        And | Or => Ok(DataField::new(&op.to_string(), DataType::Boolean, false)),
         Add | Sub | Mult | Div | Mod => {
             let data_type = left.to_field(input)?.data_type().clone();
             Ok(DataField::new(&op.to_string(), data_type, false))

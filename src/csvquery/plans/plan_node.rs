@@ -92,7 +92,7 @@ impl PlanNode {
 
 impl fmt::Display for PlanNode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match (self) {
+        match self {
             PlanNode::Scan(plan) => write!(f, "{}", plan)?,
             PlanNode::Projection(plan) => write!(f, "{}", plan)?,
             PlanNode::Selection(plan) => write!(f, "{}", plan)?,
