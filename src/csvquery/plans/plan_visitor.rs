@@ -8,10 +8,10 @@ use std::fmt;
 pub trait PlanVisitor {
     type Error;
 
-    fn pre_visit(&mut self, plan: &PlanNode) -> std::result::Result<bool, Self::Error>;
+    fn pre_visit(&mut self, plan: &PlanNode) -> std::result::Result<(), Self::Error>;
 
-    fn post_visit(&mut self, plan: &PlanNode) -> std::result::Result<bool, Self::Error> {
-        Ok(true)
+    fn post_visit(&mut self, plan: &PlanNode) -> std::result::Result<(), Self::Error> {
+        Ok(())
     }
 }
 
@@ -41,7 +41,7 @@ impl<'a, 'b> IndentVisitor<'a, 'b> {
 impl<'a, 'b> PlanVisitor for IndentVisitor<'a, 'b> {
     type Error = fmt::Error;
 
-    fn pre_visit(&mut self, plan: &PlanNode) -> std::result::Result<bool, Self::Error> {
+    fn pre_visit(&mut self, plan: &PlanNode) -> std::result::Result<(), Self::Error> {
         if self.indent > 0 {
             writeln!(self.f)?;
         }
@@ -50,11 +50,11 @@ impl<'a, 'b> PlanVisitor for IndentVisitor<'a, 'b> {
         write!(self.f, "{}", plan)?;
 
         self.indent += 1;
-        Ok(true)
+        Ok(())
     }
 
-    fn post_visit(&mut self, plan: &PlanNode) -> std::result::Result<bool, Self::Error> {
+    fn post_visit(&mut self, plan: &PlanNode) -> std::result::Result<(), Self::Error> {
         self.indent -= 1;
-        Ok(true)
+        Ok(())
     }
 }

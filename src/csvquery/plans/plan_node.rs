@@ -26,26 +26,18 @@ impl PlanNode {
         }
     }
 
-    pub fn visit<V: PlanVisitor>(&self, visitor: &mut V) -> std::result::Result<bool, V::Error> {
-        if !visitor.pre_visit(self)? {
-            return Ok(false);
-        }
+    pub fn visit<V: PlanVisitor>(&self, visitor: &mut V) -> std::result::Result<(), V::Error> {
+        visitor.pre_visit(self)?;
 
-        let recurse = match self {
+        match self {
             PlanNode::Projection(plan) => plan.input.visit(visitor)?,
             PlanNode::Selection(plan) => plan.input.visit(visitor)?,
             PlanNode::Aggregate(plan) => plan.input.visit(visitor)?,
-            PlanNode::Scan(_) => true,
+            PlanNode::Scan(_) => (),
         };
-        if !recurse {
-            return Ok(false);
-        }
 
-        if !visitor.post_visit(self)? {
-            return Ok(false);
-        }
-
-        Ok(true)
+        visitor.post_visit(self)?;
+        Ok(())
     }
 
     pub fn display_indent(&self) -> impl fmt::Display + '_ {
