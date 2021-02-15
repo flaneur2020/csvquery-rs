@@ -5,6 +5,7 @@ use std::sync::Arc;
 
 pub type PlanNodeRef = Arc<PlanNode>;
 
+#[derive(Clone)]
 pub enum PlanNode {
     ScanPlan(ScanPlan),
     ProjectionPlan(ProjectionPlan),
@@ -24,7 +25,7 @@ impl PlanNode {
 
     pub fn list_until_bottom(&self) -> CSVQueryResult<(Vec<PlanNode>, PlanNode)> {
         let max_depth = 128;
-        let list: Vec<PlanNode> = vec![];
+        let mut list: Vec<PlanNode> = vec![];
         let mut plan = self.clone();
 
         loop {
@@ -35,27 +36,27 @@ impl PlanNode {
                 )));
             }
 
-            match plan {
+            match &plan {
                 PlanNode::ScanPlan(v) => {
-                    list.push(*plan.clone());
+                    list.push(plan.clone());
                     break;
                 }
                 PlanNode::ProjectionPlan(v) => {
-                    list.push(*plan.clone());
+                    list.push(plan.clone());
                     plan = v.input.as_ref().clone();
                 }
                 PlanNode::SelectionPlan(v) => {
-                    list.push(*plan.clone());
+                    list.push(plan.clone());
                     plan = v.input.as_ref().clone();
                 }
                 PlanNode::AggregatePlan(v) => {
-                    list.push(*plan.clone());
+                    list.push(plan.clone());
                     plan = v.input.as_ref().clone();
                 }
             }
         }
 
         list.reverse();
-        Ok((list, *plan.clone()))
+        Ok((list, plan.clone()))
     }
 }

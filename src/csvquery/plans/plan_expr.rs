@@ -46,7 +46,7 @@ impl std::fmt::Display for BinaryExprOP {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PlanExpr {
     ColumnExpr {
         name: String,

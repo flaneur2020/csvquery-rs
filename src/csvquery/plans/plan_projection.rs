@@ -3,6 +3,7 @@ use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct ProjectionPlan {
     pub input: PlanNodeRef,
     schema: DataSchemaRef,

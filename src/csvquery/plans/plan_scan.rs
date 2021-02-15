@@ -3,6 +3,7 @@ use crate::csvquery::data_sources::DataSourceRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct ScanPlan {
     pub path: String,
     pub data_source: DataSourceRef,

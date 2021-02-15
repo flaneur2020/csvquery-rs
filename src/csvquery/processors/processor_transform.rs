@@ -22,7 +22,7 @@ impl TransformProcessor {
 #[async_trait]
 impl IProcessor for TransformProcessor {
     fn name(&self) -> &'static str {
-        format!("TransformProcessor<{}>", self.transform_name)
+        "TransformProcessor"
     }
 
     fn connect_to(&mut self, input: ProcessorRef) -> CSVQueryResult<()> {

@@ -2,6 +2,7 @@ use crate::csvquery::data_schema::DataSchemaRef;
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
 
+#[derive(Clone)]
 pub struct SelectionPlan {
     pub input: PlanNodeRef,
     pub expr: PlanExpr,
