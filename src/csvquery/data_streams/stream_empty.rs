@@ -1,10 +1,9 @@
-use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::data_block::DataBlock;
+use crate::csvquery::error::CSVQueryResult;
 use futures::{Stream, StreamExt};
 use std::task::{Context, Poll};
 
-pub struct EmptyStream {
-}
+pub struct EmptyStream {}
 
 impl Stream for EmptyStream {
     type Item = CSVQueryResult<DataBlock>;

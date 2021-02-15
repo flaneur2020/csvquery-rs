@@ -5,8 +5,7 @@ use crate::csvquery::processors::{IProcessor, ProcessorRef};
 use async_trait::async_trait;
 use futures::StreamExt;
 
-pub struct ScanProcessor {
-}
+pub struct ScanProcessor {}
 
 impl ScanProcessor {
     pub fn new() -> Self {
@@ -21,7 +20,9 @@ impl IProcessor for ScanProcessor {
     }
 
     fn connect_to(&mut self, input: ProcessorRef) -> CSVQueryResult<()> {
-        Err(CSVQueryError::Internal("Can not connect ScanProcessor to another processor".to_string()))
+        Err(CSVQueryError::Internal(
+            "Can not connect ScanProcessor to another processor".to_string(),
+        ))
     }
 
     async fn execute(&self) -> CSVQueryResult<DataBlockStream> {

@@ -37,8 +37,8 @@ impl ScanPlan {
         let mut new_fields: Vec<DataField> = Vec::new();
         for projection in projections.iter() {
             let field = base_schema
-                .find_field(projection)
-                .ok_or_else(|| CSVQueryError::FieldNotFound(projection.clone()))?;
+                .field_with_name(projection)
+                .or_else(|_| CSVQueryError::FieldNotFound(projection.clone()))?;
             new_fields.push(field.clone());
         }
 

@@ -75,16 +75,18 @@ impl PlanExpr {
             PlanExpr::ColumnExpr { ref name } => {
                 let schema = input.schema().clone();
                 let field = schema
-                    .find_field(&name)
-                    .ok_or_else(|| CSVQueryError::FieldNotFound(name.clone()))?;
+                    .field_with_name(&name)
+                    .or_else(|_| Err(CSVQueryError::FieldNotFound(name.clone())))?;
                 Ok(field.clone())
             }
 
-            PlanExpr::LiteralStringExpr { ref str } => {
-                Ok(DataField::new(str.clone(), DataType::String))
+            PlanExpr::LiteralStringExpr { str } => {
+                Ok(DataField::new(&(str.clone()), DataType::Utf8, false))
             }
 
-            PlanExpr::LiteralLongExpr { ref n } => Ok(DataField::new(n.clone(), DataType::Int64)),
+            PlanExpr::LiteralLongExpr { n } => {
+                Ok(DataField::new(&(n.clone()), DataType::Int64, false))
+            }
 
             PlanExpr::BinaryExpr {
                 name,
@@ -94,8 +96,9 @@ impl PlanExpr {
             } => convert_binary_expr_to_field(input, name.clone(), op.clone(), left, right),
 
             PlanExpr::AggregateExpr { name, expr } => Ok(DataField::new(
-                name.clone(),
-                expr.to_field(input)?.data_type,
+                &name.clone(),
+                expr.to_field(input)?.data_type().clone(),
+                false,
             )),
         }
     }
@@ -111,11 +114,13 @@ fn convert_binary_expr_to_field(
     use BinaryExprOP::*;
 
     match op {
-        Eq | Neq | Gt | Gte | Lt | Lte => Ok(DataField::new(op.to_string(), DataType::Boolean)),
-        And | Or => Ok(DataField::new(op.to_string(), DataType::Boolean)),
+        Eq | Neq | Gt | Gte | Lt | Lte => {
+            Ok(DataField::new(&op.to_string(), DataType::Boolean, false))
+        }
+        And | Or => Ok(DataField::new(&op.to_string(), DataType::Boolean, false)),
         Add | Sub | Mult | Div | Mod => {
-            let data_type = left.to_field(input)?.data_type;
-            Ok(DataField::new(op.to_string(), data_type))
+            let data_type = left.to_field(input)?.data_type().clone();
+            Ok(DataField::new(&op.to_string(), data_type, false))
         }
     }
 }

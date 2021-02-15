@@ -1,6 +1,6 @@
+use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::PlanNode;
 use crate::csvquery::processors::Pipeline;
-use crate::csvquery::error::CSVQueryResult;
 
 pub struct PipelineBuilder {
     plan: PlanNode,
@@ -19,8 +19,7 @@ impl PipelineBuilder {
         let (plan_items, _) = self.plan.list_until_bottom()?;
         for plan in plan_items {
             match plan {
-                PlanNode::ScanPlan(v) => {
-                },
+                PlanNode::ScanPlan(v) => {}
                 _ => {
                     // TODO
                 }

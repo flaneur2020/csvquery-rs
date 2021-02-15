@@ -1,7 +1,7 @@
 mod stream;
 mod stream_channel;
-mod stream_transformed;
 mod stream_empty;
+mod stream_transformed;
 
 pub use stream::DataBlockStream;
 pub use stream_channel::ChannelStream;
