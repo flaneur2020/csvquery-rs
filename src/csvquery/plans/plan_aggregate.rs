@@ -9,7 +9,6 @@ pub struct AggregatePlan {
     pub input: PlanNodeRef,
     group_exprs: Vec<PlanExpr>,
     aggregate_exprs: Vec<PlanExpr>,
-    schema: DataSchemaRef,
 }
 
 impl AggregatePlan {
@@ -17,23 +16,21 @@ impl AggregatePlan {
         input: PlanNodeRef,
         group_exprs: Vec<PlanExpr>,
         aggregate_exprs: Vec<PlanExpr>,
-    ) -> CSVQueryResult<Self> {
-        let group_fields = exprs_to_fields(input.clone(), &group_exprs)?;
-        let mut aggregate_fields = exprs_to_fields(input.clone(), &aggregate_exprs)?;
-        let mut all_fields = group_fields;
-        all_fields.append(&mut aggregate_fields);
-        let schema = Arc::new(DataSchema::new(all_fields));
-
-        return Ok(Self {
+    ) -> Self {
+        return Self {
             input: input,
             group_exprs: group_exprs,
             aggregate_exprs: aggregate_exprs,
-            schema: schema,
-        });
+        };
     }
 
-    pub fn schema(&self) -> DataSchemaRef {
-        self.schema.clone()
+    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+        let group_fields = exprs_to_fields(self.input.clone(), &self.group_exprs)?;
+        let mut aggregate_fields = exprs_to_fields(self.input.clone(), &self.aggregate_exprs)?;
+        let mut all_fields = group_fields;
+        all_fields.append(&mut aggregate_fields);
+        let schema = DataSchema::new(all_fields);
+        Ok(Arc::new(schema))
     }
 }
 

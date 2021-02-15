@@ -9,7 +9,6 @@ pub struct ScanPlan {
     pub path: String,
     pub data_source: DataSourceRef,
     pub projections: Vec<String>,
-    schema: DataSchemaRef,
 }
 
 impl ScanPlan {
@@ -17,14 +16,12 @@ impl ScanPlan {
         path: &str,
         data_source: DataSourceRef,
         projections: Vec<String>,
-    ) -> CSVQueryResult<Self> {
-        let schema = Self::derive_schema(data_source.schema().clone(), &projections)?;
-        Ok(Self {
+    ) -> Self {
+        Self {
             path: path.to_string(),
             data_source: data_source,
             projections: projections,
-            schema: schema,
-        })
+        }
     }
 
     fn derive_schema(
@@ -47,8 +44,8 @@ impl ScanPlan {
         Ok(Arc::new(new_schema))
     }
 
-    pub fn schema(&self) -> DataSchemaRef {
-        self.schema.clone()
+    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+        Self::derive_schema(self.data_source.schema().clone(), &self.projections)
     }
 }
 

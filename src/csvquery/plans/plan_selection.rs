@@ -10,15 +10,15 @@ pub struct SelectionPlan {
 }
 
 impl SelectionPlan {
-    pub fn new(input: PlanNodeRef, expr: PlanExpr) -> CSVQueryResult<Self> {
-        Ok(Self {
+    pub fn new(input: PlanNodeRef, expr: PlanExpr) -> Self {
+        Self {
             input: input,
             expr: expr,
-        })
+        }
     }
 
-    pub fn schema(&self) -> DataSchemaRef {
-        self.input.schema().clone()
+    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+        Ok(self.input.schema()?.clone())
     }
 }
 

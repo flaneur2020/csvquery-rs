@@ -7,22 +7,21 @@ use std::fmt;
 #[derive(Clone)]
 pub struct ProjectionPlan {
     pub input: PlanNodeRef,
-    schema: DataSchemaRef,
+    pub exprs: Vec<PlanExpr>,
 }
 
 impl ProjectionPlan {
-    pub fn new(input: PlanNodeRef, exprs: Vec<PlanExpr>) -> CSVQueryResult<Self> {
-        let fields = exprs_to_fields(input.clone(), &exprs)?;
-        let schema = Arc::new(DataSchema::new(fields));
-
-        Ok(Self {
+    pub fn new(input: PlanNodeRef, exprs: Vec<PlanExpr>) -> Self {
+        Self {
             input: input,
-            schema: schema,
-        })
+            exprs: exprs,
+        }
     }
 
-    pub fn schema(&self) -> DataSchemaRef {
-        self.schema.clone()
+    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+        let fields = exprs_to_fields(self.input.clone(), &self.exprs)?;
+        let schema = Arc::new(DataSchema::new(fields));
+        Ok(schema)
     }
 }
 
@@ -30,13 +29,18 @@ impl fmt::Display for ProjectionPlan {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Projection: ")?;
 
-        let field_names = self.schema
-            .fields()
-            .iter()
-            .map(|f| f.name().to_string() )
-            .collect::<Vec<String>>();
-        write!(f, "{}", field_names.join(", "))?;
-
+        match self.schema() {
+            Ok(schema) => {
+                let field_names = schema.fields()
+                    .iter()
+                    .map(|f| f.name().to_string() )
+                    .collect::<Vec<String>>();
+                write!(f, "{}", field_names.join(", "))?;
+            }
+            Err(err) => {
+                write!(f, "Err {}", err);
+            }
+       }
         Ok(())
     }
 }

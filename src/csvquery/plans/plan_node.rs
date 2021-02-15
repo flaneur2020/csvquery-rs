@@ -15,7 +15,7 @@ pub enum PlanNode {
 }
 
 impl PlanNode {
-    pub fn schema(&self) -> DataSchemaRef {
+    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
         match self {
             PlanNode::ScanPlan(plan) => plan.schema(),
             PlanNode::ProjectionPlan(plan) => plan.schema(),

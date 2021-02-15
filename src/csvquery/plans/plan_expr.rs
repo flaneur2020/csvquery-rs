@@ -66,7 +66,7 @@ impl PlanExpr {
     pub fn to_field(&self, input: PlanNodeRef) -> CSVQueryResult<DataField> {
         match self {
             PlanExpr::ColumnExpr(ref name) => {
-                let schema = input.schema().clone();
+                let schema = input.schema()?.clone();
                 let field = schema
                     .field_with_name(&name)
                     .or_else(|_| Err(CSVQueryError::FieldNotFound(name.clone())))?;
