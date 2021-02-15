@@ -1,7 +1,7 @@
-use std::io;
-use sqlparser::parser::ParserError;
-use std::result;
 use arrow::error::ArrowError;
+use sqlparser::parser::ParserError;
+use std::io;
+use std::result;
 
 pub type CQResult<T> = result::Result<T, CQError>;
 

@@ -14,7 +14,6 @@ impl MergeExecution {
     pub fn new() -> Self {
         Self { inputs: vec![] }
     }
-
 }
 
 #[async_trait]

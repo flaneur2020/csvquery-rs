@@ -1,8 +1,8 @@
-use std::fs::File;
+use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
+use crate::csvquery::error::{CQError, CQResult};
 use arrow::csv;
 use futures::{Stream, StreamExt};
-use crate::csvquery::error::{CQResult, CQError};
-use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
+use std::fs::File;
 use std::task::{Context, Poll};
 
 pub struct CsvStream {

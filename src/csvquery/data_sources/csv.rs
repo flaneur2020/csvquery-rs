@@ -1,10 +1,10 @@
 use crate::csvquery::data_sources::DataSource;
-use crate::csvquery::data_streams::{SendableDataBlockStream, EmptyStream};
-use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef, DataBlock};
-use crate::csvquery::error::{CQResult, CQError};
-use std::sync::Arc;
-use std::pin::Pin;
+use crate::csvquery::data_streams::{EmptyStream, SendableDataBlockStream};
+use crate::csvquery::data_types::{DataBlock, DataField, DataSchema, DataSchemaRef};
+use crate::csvquery::error::{CQError, CQResult};
 use futures::{Stream, StreamExt};
+use std::pin::Pin;
+use std::sync::Arc;
 
 pub struct CSVDataSource {
     path: String,

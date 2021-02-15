@@ -98,7 +98,7 @@ fn convert_binary_expr_to_field(
     let field_name = format!("({} {} {})", left, op, right).to_string();
 
     match op {
-        Eq | Neq | Gt | Gte | Lt | Lte  | And | Or => {
+        Eq | Neq | Gt | Gte | Lt | Lte | And | Or => {
             Ok(DataField::new(&field_name, DataType::Boolean, false))
         }
         Add | Sub | Mult | Div | Mod => {
