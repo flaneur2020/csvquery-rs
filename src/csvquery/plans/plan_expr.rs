@@ -95,13 +95,15 @@ fn convert_binary_expr_to_field(
 ) -> CSVQueryResult<DataField> {
     use BinaryExprOP::*;
 
+    let field_name = format!("({} {} {})", left, op, right).to_string();
+
     match op {
         Eq | Neq | Gt | Gte | Lt | Lte  | And | Or => {
-            Ok(DataField::new(&op.to_string(), DataType::Boolean, false))
+            Ok(DataField::new(&field_name, DataType::Boolean, false))
         }
         Add | Sub | Mult | Div | Mod => {
             let data_type = left.to_field(input)?.data_type().clone();
-            Ok(DataField::new(&op.to_string(), data_type, false))
+            Ok(DataField::new(&field_name, data_type, false))
         }
     }
 }
