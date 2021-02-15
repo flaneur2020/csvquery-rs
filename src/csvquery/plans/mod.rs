@@ -6,12 +6,15 @@ mod plan_projection;
 mod plan_scan;
 mod plan_selection;
 mod plan_utils;
+mod plan_visitor;
+mod tests;
 
 pub use plan_aggregate::AggregatePlan;
 pub use plan_builder::PlanBuilder;
-pub use plan_expr::PlanExpr;
+pub use plan_expr::{PlanExpr, BinaryExprOP};
 pub use plan_node::{PlanNode, PlanNodeRef};
 pub use plan_projection::ProjectionPlan;
 pub use plan_scan::ScanPlan;
 pub use plan_selection::SelectionPlan;
+pub use plan_visitor::PlanVisitor;
 use plan_utils::exprs_to_fields;

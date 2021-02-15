@@ -2,6 +2,7 @@ use crate::csvquery::data_types::{DataSchema, DataSchemaRef};
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::sync::Arc;
+use std::fmt;
 
 #[derive(Clone)]
 pub struct AggregatePlan {
@@ -33,5 +34,12 @@ impl AggregatePlan {
 
     pub fn schema(&self) -> DataSchemaRef {
         self.schema.clone()
+    }
+}
+
+impl fmt::Display for AggregatePlan {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Aggregate")?;
+        Ok(())
     }
 }

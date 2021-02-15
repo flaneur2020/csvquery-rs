@@ -1,6 +1,7 @@
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
+use std::fmt;
 
 #[derive(Clone)]
 pub struct SelectionPlan {
@@ -18,5 +19,12 @@ impl SelectionPlan {
 
     pub fn schema(&self) -> DataSchemaRef {
         self.input.schema().clone()
+    }
+}
+
+impl fmt::Display for SelectionPlan {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Selection")?;
+        Ok(())
     }
 }

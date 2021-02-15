@@ -1,7 +1,8 @@
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use crate::csvquery::plans::{AggregatePlan, ProjectionPlan, ScanPlan, SelectionPlan};
+use crate::csvquery::plans::{AggregatePlan, ProjectionPlan, ScanPlan, SelectionPlan, PlanVisitor};
 use std::sync::Arc;
+use std::fmt;
 
 pub type PlanNodeRef = Arc<PlanNode>;
 
@@ -21,6 +22,31 @@ impl PlanNode {
             PlanNode::SelectionPlan(plan) => plan.schema(),
             PlanNode::AggregatePlan(plan) => plan.schema(),
         }
+    }
+
+    pub fn visit<V: PlanVisitor>(
+        &self,
+        visitor: &mut V
+    ) -> std::result::Result<bool, V::Error> {
+        if !visitor.pre_visit(self)? {
+            return Ok(false);
+        }
+
+        let recurse = match self {
+            PlanNode::ProjectionPlan(plan) => plan.input.visit(visitor)?,
+            PlanNode::SelectionPlan(plan) => plan.input.visit(visitor)?,
+            PlanNode::AggregatePlan(plan) => plan.input.visit(visitor)?,
+            PlanNode::ScanPlan(_) => true,
+        };
+        if !recurse {
+            return Ok(false);
+        }
+
+        if !visitor.post_visit(self)? {
+            return Ok(false);
+        }
+
+        Ok(true)
     }
 
     pub fn list_until_bottom(&self) -> CSVQueryResult<(Vec<PlanNode>, PlanNode)> {
@@ -58,5 +84,18 @@ impl PlanNode {
 
         list.reverse();
         Ok((list, plan.clone()))
+    }
+}
+
+impl fmt::Display for PlanNode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match(self) {
+            PlanNode::ScanPlan(plan) => write!(f, "{}", plan)?,
+            PlanNode::ProjectionPlan(plan) => write!(f, "{}", plan)?,
+            PlanNode::SelectionPlan(plan) => write!(f, "{}", plan)?,
+            PlanNode::AggregatePlan(plan) => write!(f, "{}", plan)?,
+        }
+        
+        Ok(())
     }
 }

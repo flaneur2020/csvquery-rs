@@ -2,6 +2,7 @@ use crate::csvquery::data_types::{DataSchema, DataSchemaRef};
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::sync::Arc;
+use std::fmt;
 
 #[derive(Clone)]
 pub struct ProjectionPlan {
@@ -22,5 +23,20 @@ impl ProjectionPlan {
 
     pub fn schema(&self) -> DataSchemaRef {
         self.schema.clone()
+    }
+}
+
+impl fmt::Display for ProjectionPlan {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Projection: ")?;
+
+        let field_names = self.schema
+            .fields()
+            .iter()
+            .map(|f| f.name().to_string() )
+            .collect::<Vec<String>>();
+        write!(f, "{}", field_names.join(", "))?;
+
+        Ok(())
     }
 }

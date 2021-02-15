@@ -2,6 +2,7 @@ use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSourceRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use std::sync::Arc;
+use std::fmt;
 
 #[derive(Clone)]
 pub struct ScanPlan {
@@ -48,5 +49,12 @@ impl ScanPlan {
 
     pub fn schema(&self) -> DataSchemaRef {
         self.schema.clone()
+    }
+}
+
+impl fmt::Display for ScanPlan {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Scan: {}", self.path)?;
+        Ok(())
     }
 }

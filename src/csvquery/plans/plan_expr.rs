@@ -58,7 +58,6 @@ pub enum PlanExpr {
         n: String,
     },
     BinaryExpr {
-        name: String,
         op: BinaryExprOP,
         left: Arc<PlanExpr>,
         right: Arc<PlanExpr>,
@@ -89,11 +88,10 @@ impl PlanExpr {
             }
 
             PlanExpr::BinaryExpr {
-                name,
                 op,
                 left,
                 right,
-            } => convert_binary_expr_to_field(input, name.clone(), op.clone(), left, right),
+            } => convert_binary_expr_to_field(input, op.clone(), left, right),
 
             PlanExpr::AggregateExpr { name, expr } => Ok(DataField::new(
                 &name.clone(),
@@ -106,7 +104,6 @@ impl PlanExpr {
 
 fn convert_binary_expr_to_field(
     input: PlanNodeRef,
-    name: String,
     op: BinaryExprOP,
     left: &PlanExpr,
     right: &PlanExpr,

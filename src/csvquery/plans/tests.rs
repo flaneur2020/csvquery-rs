@@ -1,0 +1,21 @@
+use std::sync::Arc;
+use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::plans::{PlanBuilder, PlanExpr, BinaryExprOP};
+
+#[test]
+fn test_display_indent() -> CSVQueryResult<()> {
+    use PlanExpr::*;
+
+    let plan = PlanBuilder::csv("./sample.csv".to_string())?
+        .filter(
+            BinaryExpr{
+                op: BinaryExprOP::Eq,
+                left: Arc::new(ColumnExpr{name: "city".to_string()}),
+                right: Arc::new(LiteralStringExpr{str: "beijing".to_string()}),
+            }
+        )?
+        .project(vec![ColumnExpr{ name: "name".to_string() }, ColumnExpr{ name: "age".to_string() }])?
+        .build();
+
+    Ok(())
+}
