@@ -6,11 +6,11 @@ use futures::{Stream, StreamExt};
 use std::pin::Pin;
 use std::sync::Arc;
 
-pub struct CSVDataSource {
+pub struct CsvDataSource {
     path: String,
 }
 
-impl CSVDataSource {
+impl CsvDataSource {
     pub fn try_new(path: &str) -> CQResult<Self> {
         Ok(Self {
             path: path.to_string(),
@@ -18,7 +18,7 @@ impl CSVDataSource {
     }
 }
 
-impl DataSource for CSVDataSource {
+impl DataSource for CsvDataSource {
     fn name(&self) -> String {
         format!("CSV: {}", self.path).to_string()
     }
@@ -28,7 +28,7 @@ impl DataSource for CSVDataSource {
         Ok(Arc::new(DataSchema::new(fields)))
     }
 
-    fn streams(self) -> CQResult<Vec<SendableDataBlockStream>> {
+    fn stream(&self) -> CQResult<SendableDataBlockStream> {
         Err(CQError::Internal("not implemented".to_string()))
     }
 }

@@ -1,19 +1,20 @@
 use crate::csvquery::data_streams::{ChannelStream, CsvStream, SendableDataBlockStream};
 use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
+use crate::csvquery::data_sources::{DataSource, DataSourceRef};
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef};
-use crate::csvquery::plans::ScanPlan;
 use async_trait::async_trait;
 use futures::StreamExt;
 
 pub struct ScanExecution {
     schema: DataSchemaRef,
-    stream: SendableDataBlockStream,
+    datasource: DataSourceRef,
+    partition: usize,
 }
 
 impl ScanExecution {
-    pub fn new(schema: DataSchemaRef, stream: SendableDataBlockStream) -> Self {
-        Self { schema, stream }
+    pub fn new(schema: DataSchemaRef, datasource: DataSourceRef, partition: usize) -> Self {
+        Self { schema, datasource, partition }
     }
 }
 
