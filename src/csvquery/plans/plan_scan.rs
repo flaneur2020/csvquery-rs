@@ -20,16 +20,14 @@ impl ScanPlan {
         }
     }
 
-    fn derive_schema(
-        base_schema: DataSchemaRef,
-        projections: &Vec<String>,
-    ) -> CSVQueryResult<DataSchemaRef> {
-        if projections.len() == 0 {
+    fn derive_schema(&self) -> CSVQueryResult<DataSchemaRef> {
+        let base_schema = self.data_source.schema().clone();
+        if self.projections.len() == 0 {
             return Ok(base_schema);
         }
 
         let mut new_fields: Vec<DataField> = Vec::new();
-        for projection in projections.iter() {
+        for projection in self.projections.iter() {
             let field = base_schema
                 .field_with_name(projection)
                 .or_else(|_| Err(CSVQueryError::FieldNotFound(projection.clone())))?;
@@ -41,7 +39,7 @@ impl ScanPlan {
     }
 
     pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
-        Self::derive_schema(self.data_source.schema().clone(), &self.projections)
+        self.derive_schema()
     }
 }
 

@@ -29,19 +29,13 @@ impl fmt::Display for ProjectionPlan {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Projection: ")?;
 
-        match self.schema() {
-            Ok(schema) => {
-                let field_names = schema
-                    .fields()
-                    .iter()
-                    .map(|f| f.name().to_string())
-                    .collect::<Vec<String>>();
-                write!(f, "{}", field_names.join(", "))?;
-            }
-            Err(err) => {
-                write!(f, "Err {}", err);
-            }
-        }
+        let names = self
+            .exprs
+            .iter()
+            .map(|e| format!("{}", e).to_string())
+            .collect::<Vec<String>>();
+        write!(f, "{}", names.join(", "))?;
+
         Ok(())
     }
 }

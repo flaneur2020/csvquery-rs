@@ -17,4 +17,4 @@ pub use plan_projection::ProjectionPlan;
 pub use plan_scan::ScanPlan;
 pub use plan_selection::SelectionPlan;
 use plan_utils::exprs_to_fields;
-pub use plan_visitor::PlanVisitor;
+pub use plan_visitor::{IndentVisitor, PlanVisitor};

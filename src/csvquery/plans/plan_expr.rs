@@ -51,15 +51,8 @@ pub enum PlanExpr {
     ColumnExpr(String),
     LiteralStringExpr(String),
     LiteralLongExpr(String),
-    BinaryExpr {
-        op: BinaryExprOP,
-        left: Arc<PlanExpr>,
-        right: Arc<PlanExpr>,
-    },
-    AggregateExpr {
-        name: String,
-        expr: Arc<PlanExpr>,
-    },
+    BinaryExpr(BinaryExprOP, Arc<PlanExpr>, Arc<PlanExpr>),
+    AggregateExpr { name: String, expr: Arc<PlanExpr> },
 }
 
 impl PlanExpr {
@@ -81,7 +74,7 @@ impl PlanExpr {
                 Ok(DataField::new(&(n.clone()), DataType::Int64, false))
             }
 
-            PlanExpr::BinaryExpr { op, left, right } => {
+            PlanExpr::BinaryExpr(op, left, right) => {
                 convert_binary_expr_to_field(input, op.clone(), left, right)
             }
 
@@ -111,5 +104,18 @@ fn convert_binary_expr_to_field(
             let data_type = left.to_field(input)?.data_type().clone();
             Ok(DataField::new(&op.to_string(), data_type, false))
         }
+    }
+}
+
+impl fmt::Display for PlanExpr {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            PlanExpr::ColumnExpr(v) => write!(f, "Column({})", v)?,
+            PlanExpr::LiteralStringExpr(v) => write!(f, "LiteralString({})", v)?,
+            PlanExpr::LiteralLongExpr(v) => write!(f, "LiteralLong({})", v)?,
+            PlanExpr::BinaryExpr(op, left, right) => write!(f, "({} {} {})", left, op, right)?,
+            PlanExpr::AggregateExpr { name, expr } => write!(f, "Aggregate({}, {})", name, expr)?,
+        }
+        Ok(())
     }
 }

@@ -1,6 +1,8 @@
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use crate::csvquery::plans::{AggregatePlan, PlanVisitor, ProjectionPlan, ScanPlan, SelectionPlan};
+use crate::csvquery::plans::{
+    AggregatePlan, IndentVisitor, PlanVisitor, ProjectionPlan, ScanPlan, SelectionPlan,
+};
 use std::fmt;
 use std::sync::Arc;
 
@@ -44,6 +46,18 @@ impl PlanNode {
         }
 
         Ok(true)
+    }
+
+    pub fn display_indent(&self) -> impl fmt::Display + '_ {
+        struct Wrapper<'a>(&'a PlanNode);
+        impl<'a> fmt::Display for Wrapper<'a> {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                let mut visitor = IndentVisitor::new(f);
+                self.0.visit(&mut visitor)?;
+                Ok(())
+            }
+        }
+        Wrapper(self)
     }
 
     pub fn list_until_bottom(&self) -> CSVQueryResult<(Vec<PlanNode>, PlanNode)> {

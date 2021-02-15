@@ -24,7 +24,7 @@ impl SelectionPlan {
 
 impl fmt::Display for SelectionPlan {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Selection")?;
+        write!(f, "Selection: {}", self.expr);
         Ok(())
     }
 }
