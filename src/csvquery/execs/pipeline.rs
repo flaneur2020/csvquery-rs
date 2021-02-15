@@ -1,5 +1,5 @@
 use crate::csvquery::data_streams::SendableDataBlockStream;
-use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, MergeExecution, ExecutionRef};
 use std::sync::Arc;
 
@@ -15,7 +15,7 @@ impl Pipeline {
         Pipeline { executions: vec![] }
     }
 
-    pub fn add_source(&mut self, execution: ExecutionRef) -> CSVQueryResult<()> {
+    pub fn add_source(&mut self, execution: ExecutionRef) -> CQResult<()> {
         if self.executions.len() == 0 {
             self.executions.push(vec![]);
         }
@@ -33,10 +33,10 @@ impl Pipeline {
     ///
     pub fn add_simple_transform(
         &mut self,
-        f: impl Fn() -> CSVQueryResult<Box<dyn Execution>>,
-    ) -> CSVQueryResult<()> {
+        f: impl Fn() -> CQResult<Box<dyn Execution>>,
+    ) -> CQResult<()> {
         let last = self.executions.last().ok_or_else(|| {
-            CSVQueryError::Internal("Can't add transform to empty pipeline".to_string())
+            CQError::Internal("Can't add transform to empty pipeline".to_string())
         })?;
         let mut items: Vec<ExecutionRef> = vec![];
         for x in last {
@@ -55,9 +55,9 @@ impl Pipeline {
     /// processor2 --   --> processor
     ///               /
     /// processor3 --
-    pub fn merge_processor(&mut self) -> CSVQueryResult<()> {
+    pub fn merge_processor(&mut self) -> CQResult<()> {
         let last = self.executions.last().ok_or_else(|| {
-            CSVQueryError::Internal("Can't add transform to empty pipeline".to_string())
+            CQError::Internal("Can't add transform to empty pipeline".to_string())
         })?;
 
         if last.len() > 1 {
@@ -70,11 +70,11 @@ impl Pipeline {
         Ok(())
     }
 
-    pub async fn execute(&mut self) -> CSVQueryResult<SendableDataBlockStream> {
+    pub async fn execute(&mut self) -> CQResult<SendableDataBlockStream> {
         let last = self
             .executions
             .last()
-            .ok_or_else(|| CSVQueryError::Internal("Can't execute empty pipeline".to_string()))?;
+            .ok_or_else(|| CQError::Internal("Can't execute empty pipeline".to_string()))?;
 
         if last.len() > 1 {
             self.merge_processor()?;

@@ -1,5 +1,5 @@
 use crate::csvquery::data_types::{DataSchema, DataSchemaRef};
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::fmt;
 use std::sync::Arc;
@@ -18,7 +18,7 @@ impl ProjectionPlan {
         }
     }
 
-    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+    pub fn schema(&self) -> CQResult<DataSchemaRef> {
         let fields = exprs_to_fields(self.input.clone(), &self.exprs)?;
         let schema = Arc::new(DataSchema::new(fields));
         Ok(schema)

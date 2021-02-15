@@ -3,10 +3,10 @@ use sqlparser::parser::ParserError;
 use std::result;
 use arrow::error::ArrowError;
 
-pub type CSVQueryResult<T> = result::Result<T, CSVQueryError>;
+pub type CQResult<T> = result::Result<T, CQError>;
 
 #[derive(thiserror::Error, Debug, Clone)]
-pub enum CSVQueryError {
+pub enum CQError {
     #[error("SQLParser Error: {0}")]
     SQLParser(#[from] ParserError),
 
@@ -20,14 +20,14 @@ pub enum CSVQueryError {
     Internal(String),
 }
 
-impl From<io::Error> for CSVQueryError {
+impl From<io::Error> for CQError {
     fn from(err: std::io::Error) -> Self {
-        CSVQueryError::Internal(err.to_string())
+        CQError::Internal(err.to_string())
     }
 }
 
-impl From<ArrowError> for CSVQueryError {
+impl From<ArrowError> for CQError {
     fn from(err: ArrowError) -> Self {
-        CSVQueryError::Internal(err.to_string())
+        CQError::Internal(err.to_string())
     }
 }

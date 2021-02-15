@@ -1,5 +1,5 @@
 use crate::csvquery::data_types::DataSchemaRef;
-use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::plans::{
     AggregatePlan, IndentVisitor, PlanVisitor, ProjectionPlan, ScanPlan, SelectionPlan,
 };
@@ -17,7 +17,7 @@ pub enum PlanNode {
 }
 
 impl PlanNode {
-    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+    pub fn schema(&self) -> CQResult<DataSchemaRef> {
         match self {
             PlanNode::Scan(plan) => plan.schema(),
             PlanNode::Projection(plan) => plan.schema(),
@@ -52,14 +52,14 @@ impl PlanNode {
         Wrapper(self)
     }
 
-    pub fn list_until_bottom(&self) -> CSVQueryResult<(Vec<PlanNode>, PlanNode)> {
+    pub fn list_until_bottom(&self) -> CQResult<(Vec<PlanNode>, PlanNode)> {
         let max_depth = 128;
         let mut list: Vec<PlanNode> = vec![];
         let mut plan = self.clone();
 
         loop {
             if list.len() > max_depth {
-                return Err(CSVQueryError::Internal(format!(
+                return Err(CQError::Internal(format!(
                     "PlanNode depth exceed {}",
                     max_depth
                 )));

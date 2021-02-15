@@ -1,9 +1,9 @@
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 use crate::csvquery::plans::{BinaryExprOP, PlanBuilder, PlanExpr};
 use std::sync::Arc;
 
 #[test]
-fn test_display_indent() -> CSVQueryResult<()> {
+fn test_display_indent() -> CQResult<()> {
     use PlanExpr::*;
 
     let plan = PlanBuilder::csv("./sample.csv")?

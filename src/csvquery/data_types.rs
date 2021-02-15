@@ -1,5 +1,5 @@
 use arrow;
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 
 pub type DataType = arrow::datatypes::DataType;
 
@@ -22,14 +22,14 @@ impl DataBlock {
         Self { schema, columns }
     }
 
-    pub fn from_arrow_record_batch(batch: &arrow::record_batch::RecordBatch) -> CSVQueryResult<DataBlock> {
+    pub fn from_arrow_record_batch(batch: &arrow::record_batch::RecordBatch) -> CQResult<DataBlock> {
         Ok(DataBlock::new(
             batch.schema(),
             Vec::from(batch.columns()),
         ))
     }
 
-    pub fn to_arrow_record_batch(&self) -> CSVQueryResult<arrow::record_batch::RecordBatch> {
+    pub fn to_arrow_record_batch(&self) -> CQResult<arrow::record_batch::RecordBatch> {
         Ok(arrow::record_batch::RecordBatch::try_new(
             self.schema.clone(),
             self.columns.clone(),

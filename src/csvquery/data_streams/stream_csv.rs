@@ -1,7 +1,7 @@
 use std::fs::File;
 use arrow::csv;
 use futures::{Stream, StreamExt};
-use crate::csvquery::error::{CSVQueryResult, CSVQueryError};
+use crate::csvquery::error::{CQResult, CQError};
 use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
 use std::task::{Context, Poll};
 
@@ -17,7 +17,7 @@ impl CsvStream {
         batch_size: usize,
         delimiter: Option<u8>,
         projection: &Option<Vec<usize>>,
-    ) -> CSVQueryResult<Self> {
+    ) -> CQResult<Self> {
         let file = File::open(filename)?;
         let reader = csv::Reader::new(
             file,
@@ -34,7 +34,7 @@ impl CsvStream {
 }
 
 impl Stream for CsvStream {
-    type Item = CSVQueryResult<DataBlock>;
+    type Item = CQResult<DataBlock>;
 
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,
@@ -47,7 +47,7 @@ impl Stream for CsvStream {
 
         Poll::Ready(Some(match o.unwrap() {
             Ok(batch) => DataBlock::from_arrow_record_batch(&batch),
-            Err(err) => Err(CSVQueryError::from(err)),
+            Err(err) => Err(CQError::from(err)),
         }))
     }
 }

@@ -1,6 +1,6 @@
 use crate::csvquery::data_streams::{ChannelStream, SendableDataBlockStream};
 use crate::csvquery::data_types::DataBlock;
-use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;
 use futures::StreamExt;
@@ -23,20 +23,20 @@ impl Execution for MergeExecution {
         "MergeExecution"
     }
 
-    fn connect_to(&mut self, input: ExecutionRef) -> CSVQueryResult<()> {
+    fn connect_to(&mut self, input: ExecutionRef) -> CQResult<()> {
         self.inputs.push(input);
         Ok(())
     }
 
-    async fn execute(&self) -> CSVQueryResult<SendableDataBlockStream> {
+    async fn execute(&self) -> CQResult<SendableDataBlockStream> {
         let num_inputs = self.inputs.len();
         match num_inputs {
-            0 => Err(CSVQueryError::Internal(
+            0 => Err(CQError::Internal(
                 "Can not merge empty processor list".to_string(),
             )),
             1 => self.inputs[0].execute().await,
             _ => {
-                let (sender, receiver) = mpsc::channel::<CSVQueryResult<DataBlock>>(num_inputs);
+                let (sender, receiver) = mpsc::channel::<CQResult<DataBlock>>(num_inputs);
                 for i in 0..num_inputs {
                     let input = self.inputs[i].clone();
                     let sender = sender.clone();

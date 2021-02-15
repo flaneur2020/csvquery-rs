@@ -1,21 +1,21 @@
 use crate::csvquery::data_types::DataBlock;
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 use futures::stream::Stream;
 use std::task::{Context, Poll};
 use tokio::sync::mpsc::Receiver;
 
 pub struct ChannelStream {
-    pub input: Receiver<CSVQueryResult<DataBlock>>,
+    pub input: Receiver<CQResult<DataBlock>>,
 }
 
 impl ChannelStream {
-    pub fn new(input: Receiver<CSVQueryResult<DataBlock>>) -> Self {
+    pub fn new(input: Receiver<CQResult<DataBlock>>) -> Self {
         Self { input }
     }
 }
 
 impl Stream for ChannelStream {
-    type Item = CSVQueryResult<DataBlock>;
+    type Item = CQResult<DataBlock>;
 
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,

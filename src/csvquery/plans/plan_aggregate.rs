@@ -1,5 +1,5 @@
 use crate::csvquery::data_types::{DataSchema, DataSchemaRef};
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::fmt;
 use std::sync::Arc;
@@ -24,7 +24,7 @@ impl AggregatePlan {
         };
     }
 
-    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+    pub fn schema(&self) -> CQResult<DataSchemaRef> {
         let group_fields = exprs_to_fields(self.input.clone(), &self.group_exprs)?;
         let mut aggregate_fields = exprs_to_fields(self.input.clone(), &self.aggregate_exprs)?;
         let mut all_fields = group_fields;

@@ -1,5 +1,5 @@
 use crate::csvquery::data_streams::{SendableDataBlockStream, TransformFunc, TransformedStream};
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;
 
@@ -25,12 +25,12 @@ impl Execution for TransformExecution {
         "TransformExecution"
     }
 
-    fn connect_to(&mut self, input: ExecutionRef) -> CSVQueryResult<()> {
+    fn connect_to(&mut self, input: ExecutionRef) -> CQResult<()> {
         self.input = Some(input);
         Ok(())
     }
 
-    async fn execute(&self) -> CSVQueryResult<SendableDataBlockStream> {
+    async fn execute(&self) -> CQResult<SendableDataBlockStream> {
         let p = self.input.clone().unwrap();
         Ok(Box::pin(TransformedStream::new(
             p.execute().await?,

@@ -1,5 +1,5 @@
 use crate::csvquery::data_types::DataSchemaRef;
-use crate::csvquery::error::CSVQueryResult;
+use crate::csvquery::error::CQResult;
 use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
 use std::fmt;
 
@@ -17,7 +17,7 @@ impl SelectionPlan {
         }
     }
 
-    pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
+    pub fn schema(&self) -> CQResult<DataSchemaRef> {
         Ok(self.input.schema()?.clone())
     }
 }

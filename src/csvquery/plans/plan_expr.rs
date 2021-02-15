@@ -1,5 +1,5 @@
 use crate::csvquery::data_types::{DataField, DataType};
-use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
+use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::plans::PlanNodeRef;
 use std::fmt;
 use std::sync::Arc;
@@ -56,13 +56,13 @@ pub enum PlanExpr {
 }
 
 impl PlanExpr {
-    pub fn to_field(&self, input: PlanNodeRef) -> CSVQueryResult<DataField> {
+    pub fn to_field(&self, input: PlanNodeRef) -> CQResult<DataField> {
         match self {
             PlanExpr::ColumnExpr(ref name) => {
                 let schema = input.schema()?.clone();
                 let field = schema
                     .field_with_name(&name)
-                    .or_else(|_| Err(CSVQueryError::FieldNotFound(name.clone())))?;
+                    .or_else(|_| Err(CQError::FieldNotFound(name.clone())))?;
                 Ok(field.clone())
             }
 
@@ -92,7 +92,7 @@ fn convert_binary_expr_to_field(
     op: BinaryExprOP,
     left: &PlanExpr,
     right: &PlanExpr,
-) -> CSVQueryResult<DataField> {
+) -> CQResult<DataField> {
     use BinaryExprOP::*;
 
     let field_name = format!("({} {} {})", left, op, right).to_string();
