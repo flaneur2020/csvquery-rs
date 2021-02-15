@@ -14,13 +14,13 @@ pub struct ScanPlan {
 
 impl ScanPlan {
     pub fn new(
-        path: String,
+        path: &str,
         data_source: DataSourceRef,
         projections: Vec<String>,
     ) -> CSVQueryResult<Self> {
         let schema = Self::derive_schema(data_source.schema().clone(), &projections)?;
         Ok(Self {
-            path: path,
+            path: path.to_string(),
             data_source: data_source,
             projections: projections,
             schema: schema,

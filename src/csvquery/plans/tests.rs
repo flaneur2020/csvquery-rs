@@ -6,15 +6,15 @@ use crate::csvquery::plans::{PlanBuilder, PlanExpr, BinaryExprOP};
 fn test_display_indent() -> CSVQueryResult<()> {
     use PlanExpr::*;
 
-    let plan = PlanBuilder::csv("./sample.csv".to_string())?
+    let plan = PlanBuilder::csv("./sample.csv")?
         .filter(
             BinaryExpr{
                 op: BinaryExprOP::Eq,
-                left: Arc::new(ColumnExpr{name: "city".to_string()}),
-                right: Arc::new(LiteralStringExpr{str: "beijing".to_string()}),
+                left: Arc::new(ColumnExpr("city".to_string())),
+                right: Arc::new(LiteralStringExpr("beijing".to_string())),
             }
         )?
-        .project(vec![ColumnExpr{ name: "name".to_string() }, ColumnExpr{ name: "age".to_string() }])?
+        .project(vec![ColumnExpr("name".to_string()), ColumnExpr("age".to_string())])?
         .build();
 
     Ok(())

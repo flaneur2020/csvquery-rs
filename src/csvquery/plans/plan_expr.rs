@@ -48,15 +48,9 @@ impl std::fmt::Display for BinaryExprOP {
 
 #[derive(Debug, Clone)]
 pub enum PlanExpr {
-    ColumnExpr {
-        name: String,
-    },
-    LiteralStringExpr {
-        str: String,
-    },
-    LiteralLongExpr {
-        n: String,
-    },
+    ColumnExpr(String),
+    LiteralStringExpr(String),
+    LiteralLongExpr(String),
     BinaryExpr {
         op: BinaryExprOP,
         left: Arc<PlanExpr>,
@@ -71,7 +65,7 @@ pub enum PlanExpr {
 impl PlanExpr {
     pub fn to_field(&self, input: PlanNodeRef) -> CSVQueryResult<DataField> {
         match self {
-            PlanExpr::ColumnExpr { ref name } => {
+            PlanExpr::ColumnExpr(ref name) => {
                 let schema = input.schema().clone();
                 let field = schema
                     .field_with_name(&name)
@@ -79,11 +73,11 @@ impl PlanExpr {
                 Ok(field.clone())
             }
 
-            PlanExpr::LiteralStringExpr { str } => {
+            PlanExpr::LiteralStringExpr(str) => {
                 Ok(DataField::new(&(str.clone()), DataType::Utf8, false))
             }
 
-            PlanExpr::LiteralLongExpr { n } => {
+            PlanExpr::LiteralLongExpr(n) => {
                 Ok(DataField::new(&(n.clone()), DataType::Int64, false))
             }
 

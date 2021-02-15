@@ -9,8 +9,8 @@ pub struct CSVDataSource {
 }
 
 impl CSVDataSource {
-    pub fn open(path: String) -> CSVQueryResult<Self> {
-        Ok(Self { path })
+    pub fn open(path: &str) -> CSVQueryResult<Self> {
+        Ok(Self { path: path.to_string() })
     }
 }
 
