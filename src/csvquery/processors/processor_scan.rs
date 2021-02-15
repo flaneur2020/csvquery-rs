@@ -1,15 +1,22 @@
-use crate::csvquery::data_streams::{ChannelStream, DataBlockStream};
-use crate::csvquery::data_types::DataBlock;
+use crate::csvquery::data_streams::{ChannelStream, SendableDataBlockStream, CsvStream};
+use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
+use crate::csvquery::plans::{ScanPlan};
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use crate::csvquery::processors::{IProcessor, ProcessorRef};
 use async_trait::async_trait;
 use futures::StreamExt;
 
-pub struct ScanProcessor {}
+pub struct ScanProcessor {
+    schema: DataSchemaRef,
+    stream: SendableDataBlockStream,
+}
 
 impl ScanProcessor {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new(schema: DataSchemaRef, stream: SendableDataBlockStream) -> Self {
+        Self {
+            schema,
+            stream,
+        }
     }
 }
 
@@ -25,7 +32,7 @@ impl IProcessor for ScanProcessor {
         ))
     }
 
-    async fn execute(&self) -> CSVQueryResult<DataBlockStream> {
+    async fn execute(&self) -> CSVQueryResult<SendableDataBlockStream> {
         Err(CSVQueryError::Internal("not implemented".to_string()))
     }
 }

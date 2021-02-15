@@ -1,4 +1,4 @@
-use crate::csvquery::data_streams::DataBlockStream;
+use crate::csvquery::data_streams::SendableDataBlockStream;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use crate::csvquery::processors::{IProcessor, MergeProcessor, ProcessorRef};
 use std::sync::Arc;
@@ -70,7 +70,7 @@ impl Pipeline {
         Ok(())
     }
 
-    pub async fn execute(&mut self) -> CSVQueryResult<DataBlockStream> {
+    pub async fn execute(&mut self) -> CSVQueryResult<SendableDataBlockStream> {
         let last = self
             .processors
             .last()

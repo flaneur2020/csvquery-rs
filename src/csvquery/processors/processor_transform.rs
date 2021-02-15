@@ -1,4 +1,4 @@
-use crate::csvquery::data_streams::{DataBlockStream, TransformFunc, TransformedStream};
+use crate::csvquery::data_streams::{SendableDataBlockStream, TransformFunc, TransformedStream};
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::processors::{IProcessor, ProcessorRef};
 use async_trait::async_trait;
@@ -30,7 +30,7 @@ impl IProcessor for TransformProcessor {
         Ok(())
     }
 
-    async fn execute(&self) -> CSVQueryResult<DataBlockStream> {
+    async fn execute(&self) -> CSVQueryResult<SendableDataBlockStream> {
         let p = self.input.clone().unwrap();
         Ok(Box::pin(TransformedStream::new(
             p.execute().await?,

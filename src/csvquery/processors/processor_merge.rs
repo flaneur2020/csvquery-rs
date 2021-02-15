@@ -1,4 +1,4 @@
-use crate::csvquery::data_streams::{ChannelStream, DataBlockStream};
+use crate::csvquery::data_streams::{ChannelStream, SendableDataBlockStream};
 use crate::csvquery::data_types::DataBlock;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use crate::csvquery::processors::{IProcessor, ProcessorRef};
@@ -27,7 +27,7 @@ impl IProcessor for MergeProcessor {
         Ok(())
     }
 
-    async fn execute(&self) -> CSVQueryResult<DataBlockStream> {
+    async fn execute(&self) -> CSVQueryResult<SendableDataBlockStream> {
         let num_inputs = self.inputs.len();
         match num_inputs {
             0 => Err(CSVQueryError::Internal(

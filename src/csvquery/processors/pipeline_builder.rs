@@ -16,10 +16,13 @@ impl PipelineBuilder {
     }
 
     fn build(self) -> CSVQueryResult<Pipeline> {
+        let pipeline = Pipeline::new();
+
         let (plan_items, _) = self.plan.list_until_bottom()?;
         for plan in plan_items {
             match plan {
-                PlanNode::Scan(v) => {}
+                PlanNode::Scan(v) => {
+                }
                 _ => {
                     // TODO
                 }

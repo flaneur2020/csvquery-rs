@@ -4,7 +4,7 @@ mod stream_empty;
 mod stream_transformed;
 mod stream_csv;
 
-pub use stream::DataBlockStream;
+pub use stream::{SendableDataBlockStream};
 pub use stream_channel::ChannelStream;
 pub use stream_empty::EmptyStream;
 pub use stream_csv::CsvStream;

@@ -6,22 +6,20 @@ use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct ScanPlan {
-    pub path: String,
     pub data_source: DataSourceRef,
     pub projections: Vec<String>,
 }
 
 impl ScanPlan {
-    pub fn new(path: &str, data_source: DataSourceRef, projections: Vec<String>) -> Self {
+    pub fn new(data_source: DataSourceRef, projections: Vec<String>) -> Self {
         Self {
-            path: path.to_string(),
             data_source: data_source,
             projections: projections,
         }
     }
 
     fn derive_schema(&self) -> CSVQueryResult<DataSchemaRef> {
-        let base_schema = self.data_source.schema().clone();
+        let base_schema = self.data_source.schema()?.clone();
         if self.projections.len() == 0 {
             return Ok(base_schema);
         }
@@ -45,7 +43,7 @@ impl ScanPlan {
 
 impl fmt::Display for ScanPlan {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Scan: {}", self.path)?;
+        write!(f, "Scan: {}", self.data_source.name())?;
         Ok(())
     }
 }
