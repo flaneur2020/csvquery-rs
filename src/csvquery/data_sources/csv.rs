@@ -1,9 +1,7 @@
-use crate::csvquery::data_block::DataBlock;
-use crate::csvquery::data_schema::{DataField, DataSchema, DataSchemaRef};
+use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSource;
 use crate::csvquery::data_streams::{DataBlockStream, EmptyStream};
 use crate::csvquery::error::CSVQueryResult;
-use futures::stream;
 use std::sync::Arc;
 
 pub struct CSVDataSource {

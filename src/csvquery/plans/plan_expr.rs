@@ -1,4 +1,4 @@
-use crate::csvquery::data_schema::{DataField, DataType};
+use crate::csvquery::data_types::{DataField, DataType};
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use crate::csvquery::plans::PlanNodeRef;
 use std::fmt;

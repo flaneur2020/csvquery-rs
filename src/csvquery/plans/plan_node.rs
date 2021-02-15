@@ -1,4 +1,4 @@
-use crate::csvquery::data_schema::DataSchemaRef;
+use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use crate::csvquery::plans::{AggregatePlan, ProjectionPlan, ScanPlan, SelectionPlan};
 use std::sync::Arc;

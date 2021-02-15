@@ -1,4 +1,4 @@
-use crate::csvquery::data_schema::DataSchemaRef;
+use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::data_streams::DataBlockStream;
 use std::sync::Arc;
 

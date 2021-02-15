@@ -1,4 +1,4 @@
-use crate::csvquery::data_schema::{DataField, DataSchema, DataSchemaRef};
+use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::data_sources::DataSourceRef;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
 use std::sync::Arc;
@@ -38,7 +38,7 @@ impl ScanPlan {
         for projection in projections.iter() {
             let field = base_schema
                 .field_with_name(projection)
-                .or_else(|_| CSVQueryError::FieldNotFound(projection.clone()))?;
+                .or_else(|_| Err(CSVQueryError::FieldNotFound(projection.clone())))?;
             new_fields.push(field.clone());
         }
 

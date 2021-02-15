@@ -1,4 +1,4 @@
-use crate::csvquery::data_block::DataBlock;
+use crate::csvquery::data_types::DataBlock;
 use crate::csvquery::error::CSVQueryResult;
 use futures::stream::Stream;
 use std::task::{Context, Poll};

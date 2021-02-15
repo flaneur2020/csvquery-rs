@@ -1,4 +1,4 @@
-use crate::csvquery::data_schema::DataSchemaRef;
+use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::CSVQueryResult;
 use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
 
