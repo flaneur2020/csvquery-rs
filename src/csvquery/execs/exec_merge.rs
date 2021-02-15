@@ -1,28 +1,29 @@
 use crate::csvquery::data_streams::{ChannelStream, SendableDataBlockStream};
 use crate::csvquery::data_types::DataBlock;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use crate::csvquery::processors::{IProcessor, ProcessorRef};
+use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;
 use futures::StreamExt;
 use tokio::sync::mpsc;
 
-pub struct MergeProcessor {
-    inputs: Vec<ProcessorRef>,
+pub struct MergeExecution {
+    inputs: Vec<ExecutionRef>,
 }
 
-impl MergeProcessor {
+impl MergeExecution {
     pub fn new() -> Self {
         Self { inputs: vec![] }
     }
+
 }
 
 #[async_trait]
-impl IProcessor for MergeProcessor {
+impl Execution for MergeExecution {
     fn name(&self) -> &'static str {
-        "MergeProcessor"
+        "MergeExecution"
     }
 
-    fn connect_to(&mut self, input: ProcessorRef) -> CSVQueryResult<()> {
+    fn connect_to(&mut self, input: ExecutionRef) -> CSVQueryResult<()> {
         self.inputs.push(input);
         Ok(())
     }

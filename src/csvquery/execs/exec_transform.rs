@@ -1,15 +1,15 @@
 use crate::csvquery::data_streams::{SendableDataBlockStream, TransformFunc, TransformedStream};
 use crate::csvquery::error::CSVQueryResult;
-use crate::csvquery::processors::{IProcessor, ProcessorRef};
+use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;
 
-pub struct TransformProcessor {
-    input: Option<ProcessorRef>,
+pub struct TransformExecution {
+    input: Option<ExecutionRef>,
     transform_name: &'static str,
     transform_func: TransformFunc,
 }
 
-impl TransformProcessor {
+impl TransformExecution {
     pub fn new(transform_name: &'static str, transform_func: TransformFunc) -> Self {
         Self {
             input: None,
@@ -20,12 +20,12 @@ impl TransformProcessor {
 }
 
 #[async_trait]
-impl IProcessor for TransformProcessor {
+impl Execution for TransformExecution {
     fn name(&self) -> &'static str {
-        "TransformProcessor"
+        "TransformExecution"
     }
 
-    fn connect_to(&mut self, input: ProcessorRef) -> CSVQueryResult<()> {
+    fn connect_to(&mut self, input: ExecutionRef) -> CSVQueryResult<()> {
         self.input = Some(input);
         Ok(())
     }

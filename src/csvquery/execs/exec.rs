@@ -3,13 +3,13 @@ use crate::csvquery::error::CSVQueryResult;
 use async_trait::async_trait;
 use std::sync::Arc;
 
-pub type ProcessorRef = Arc<dyn IProcessor>;
+pub type ExecutionRef = Arc<dyn Execution>;
 
 #[async_trait]
-pub trait IProcessor: Sync + Send {
+pub trait Execution: Sync + Send {
     fn name(&self) -> &'static str;
 
-    fn connect_to(&mut self, input: ProcessorRef) -> CSVQueryResult<()>;
+    fn connect_to(&mut self, input: ExecutionRef) -> CSVQueryResult<()>;
 
     async fn execute(&self) -> CSVQueryResult<SendableDataBlockStream>;
 }

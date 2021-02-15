@@ -1,25 +1,25 @@
 use crate::csvquery::data_streams::SendableDataBlockStream;
 use crate::csvquery::error::{CSVQueryError, CSVQueryResult};
-use crate::csvquery::processors::{IProcessor, MergeProcessor, ProcessorRef};
+use crate::csvquery::execs::{Execution, MergeExecution, ExecutionRef};
 use std::sync::Arc;
 
-pub type Pipe = Vec<ProcessorRef>;
+pub type Pipe = Vec<ExecutionRef>;
 
 pub struct Pipeline {
-    processors: Vec<Pipe>,
+    executions: Vec<Pipe>,
 }
 
 /// pipeline contains a sequence of simple transforms
 impl Pipeline {
     pub fn new() -> Self {
-        Pipeline { processors: vec![] }
+        Pipeline { executions: vec![] }
     }
 
-    pub fn add_source(&mut self, processor: ProcessorRef) -> CSVQueryResult<()> {
-        if self.processors.len() == 0 {
-            self.processors.push(vec![]);
+    pub fn add_source(&mut self, execution: ExecutionRef) -> CSVQueryResult<()> {
+        if self.executions.len() == 0 {
+            self.executions.push(vec![]);
         }
-        self.processors[0].push(processor);
+        self.executions[0].push(execution);
         Ok(())
     }
 
@@ -33,18 +33,18 @@ impl Pipeline {
     ///
     pub fn add_simple_transform(
         &mut self,
-        f: impl Fn() -> CSVQueryResult<Box<dyn IProcessor>>,
+        f: impl Fn() -> CSVQueryResult<Box<dyn Execution>>,
     ) -> CSVQueryResult<()> {
-        let last = self.processors.last().ok_or_else(|| {
+        let last = self.executions.last().ok_or_else(|| {
             CSVQueryError::Internal("Can't add transform to empty pipeline".to_string())
         })?;
-        let mut items: Vec<ProcessorRef> = vec![];
+        let mut items: Vec<ExecutionRef> = vec![];
         for x in last {
             let mut p = f()?;
             p.connect_to(x.clone())?;
             items.push(Arc::from(p));
         }
-        self.processors.push(items);
+        self.executions.push(items);
         Ok(())
     }
 
@@ -56,23 +56,23 @@ impl Pipeline {
     ///               /
     /// processor3 --
     pub fn merge_processor(&mut self) -> CSVQueryResult<()> {
-        let last = self.processors.last().ok_or_else(|| {
+        let last = self.executions.last().ok_or_else(|| {
             CSVQueryError::Internal("Can't add transform to empty pipeline".to_string())
         })?;
 
         if last.len() > 1 {
-            let mut p = MergeProcessor::new();
+            let mut p = MergeExecution::new();
             for x in last {
                 p.connect_to(x.clone())?;
             }
-            self.processors.push(vec![Arc::new(p)]);
+            self.executions.push(vec![Arc::new(p)]);
         }
         Ok(())
     }
 
     pub async fn execute(&mut self) -> CSVQueryResult<SendableDataBlockStream> {
         let last = self
-            .processors
+            .executions
             .last()
             .ok_or_else(|| CSVQueryError::Internal("Can't execute empty pipeline".to_string()))?;
 
@@ -80,7 +80,7 @@ impl Pipeline {
             self.merge_processor()?;
         }
 
-        let p = &(self.processors.last().unwrap()[0]);
+        let p = &(self.executions.last().unwrap()[0]);
         p.execute().await
     }
 }
