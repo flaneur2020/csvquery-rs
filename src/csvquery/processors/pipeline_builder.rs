@@ -19,7 +19,7 @@ impl PipelineBuilder {
         let (plan_items, _) = self.plan.list_until_bottom()?;
         for plan in plan_items {
             match plan {
-                PlanNode::ScanPlan(v) => {}
+                PlanNode::Scan(v) => {}
                 _ => {
                     // TODO
                 }

@@ -8,19 +8,19 @@ pub type PlanNodeRef = Arc<PlanNode>;
 
 #[derive(Clone)]
 pub enum PlanNode {
-    ScanPlan(ScanPlan),
-    ProjectionPlan(ProjectionPlan),
-    SelectionPlan(SelectionPlan),
-    AggregatePlan(AggregatePlan),
+    Scan(ScanPlan),
+    Projection(ProjectionPlan),
+    Selection(SelectionPlan),
+    Aggregate(AggregatePlan),
 }
 
 impl PlanNode {
     pub fn schema(&self) -> CSVQueryResult<DataSchemaRef> {
         match self {
-            PlanNode::ScanPlan(plan) => plan.schema(),
-            PlanNode::ProjectionPlan(plan) => plan.schema(),
-            PlanNode::SelectionPlan(plan) => plan.schema(),
-            PlanNode::AggregatePlan(plan) => plan.schema(),
+            PlanNode::Scan(plan) => plan.schema(),
+            PlanNode::Projection(plan) => plan.schema(),
+            PlanNode::Selection(plan) => plan.schema(),
+            PlanNode::Aggregate(plan) => plan.schema(),
         }
     }
 
@@ -33,10 +33,10 @@ impl PlanNode {
         }
 
         let recurse = match self {
-            PlanNode::ProjectionPlan(plan) => plan.input.visit(visitor)?,
-            PlanNode::SelectionPlan(plan) => plan.input.visit(visitor)?,
-            PlanNode::AggregatePlan(plan) => plan.input.visit(visitor)?,
-            PlanNode::ScanPlan(_) => true,
+            PlanNode::Projection(plan) => plan.input.visit(visitor)?,
+            PlanNode::Selection(plan) => plan.input.visit(visitor)?,
+            PlanNode::Aggregate(plan) => plan.input.visit(visitor)?,
+            PlanNode::Scan(_) => true,
         };
         if !recurse {
             return Ok(false);
@@ -63,19 +63,19 @@ impl PlanNode {
             }
 
             match &plan {
-                PlanNode::ScanPlan(v) => {
+                PlanNode::Scan(v) => {
                     list.push(plan.clone());
                     break;
                 }
-                PlanNode::ProjectionPlan(v) => {
+                PlanNode::Projection(v) => {
                     list.push(plan.clone());
                     plan = v.input.as_ref().clone();
                 }
-                PlanNode::SelectionPlan(v) => {
+                PlanNode::Selection(v) => {
                     list.push(plan.clone());
                     plan = v.input.as_ref().clone();
                 }
-                PlanNode::AggregatePlan(v) => {
+                PlanNode::Aggregate(v) => {
                     list.push(plan.clone());
                     plan = v.input.as_ref().clone();
                 }
@@ -90,10 +90,10 @@ impl PlanNode {
 impl fmt::Display for PlanNode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match(self) {
-            PlanNode::ScanPlan(plan) => write!(f, "{}", plan)?,
-            PlanNode::ProjectionPlan(plan) => write!(f, "{}", plan)?,
-            PlanNode::SelectionPlan(plan) => write!(f, "{}", plan)?,
-            PlanNode::AggregatePlan(plan) => write!(f, "{}", plan)?,
+            PlanNode::Scan(plan) => write!(f, "{}", plan)?,
+            PlanNode::Projection(plan) => write!(f, "{}", plan)?,
+            PlanNode::Selection(plan) => write!(f, "{}", plan)?,
+            PlanNode::Aggregate(plan) => write!(f, "{}", plan)?,
         }
         
         Ok(())
