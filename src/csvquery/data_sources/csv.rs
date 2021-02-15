@@ -1,5 +1,5 @@
 use crate::csvquery::data_sources::DataSource;
-use crate::csvquery::data_streams::{EmptyStream, SendableDataBlockStream};
+use crate::csvquery::streams::{EmptyStream, SendableDataBlockStream};
 use crate::csvquery::data_types::{DataBlock, DataField, DataSchema, DataSchemaRef};
 use crate::csvquery::error::{CQError, CQResult};
 use futures::{Stream, StreamExt};

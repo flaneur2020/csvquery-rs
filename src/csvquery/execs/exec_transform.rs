@@ -1,4 +1,4 @@
-use crate::csvquery::data_streams::{SendableDataBlockStream, TransformFunc, TransformedStream};
+use crate::csvquery::streams::{SendableDataBlockStream, TransformFunc, TransformedStream};
 use crate::csvquery::error::CQResult;
 use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;

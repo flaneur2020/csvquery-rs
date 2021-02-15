@@ -1,4 +1,4 @@
-use crate::csvquery::data_streams::SendableDataBlockStream;
+use crate::csvquery::streams::SendableDataBlockStream;
 use crate::csvquery::error::CQResult;
 use async_trait::async_trait;
 use std::sync::Arc;
