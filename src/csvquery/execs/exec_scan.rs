@@ -23,6 +23,10 @@ impl Execution for ScanExecution {
         "ScanExecution"
     }
 
+    fn inputs(&self) -> Vec<ExecutionRef> {
+        vec![]
+    }
+
     fn connect_to(&mut self, _: ExecutionRef) -> CQResult<()> {
         Err(CQError::Internal(
             "can not connect source execution".to_string(),

@@ -25,6 +25,13 @@ impl Execution for TransformExecution {
         "TransformExecution"
     }
 
+    fn inputs(&self) -> Vec<ExecutionRef> {
+        match &self.input {
+            None => vec![],
+            Some(input) => vec![input.clone()],
+        }
+    }
+
     fn connect_to(&mut self, input: ExecutionRef) -> CQResult<()> {
         self.input = Some(input);
         Ok(())

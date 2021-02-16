@@ -27,6 +27,10 @@ impl Execution for MergeExecution {
         Ok(())
     }
 
+    fn inputs(&self) -> Vec<ExecutionRef> {
+        self.inputs.clone()
+    }
+
     async fn execute(&self) -> CQResult<SendableDataBlockStream> {
         let num_inputs = self.inputs.len();
         match num_inputs {

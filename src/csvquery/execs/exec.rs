@@ -11,5 +11,7 @@ pub trait Execution: Sync + Send {
 
     fn connect_to(&mut self, input: ExecutionRef) -> CQResult<()>;
 
+    fn inputs(&self) -> Vec<ExecutionRef>;
+
     async fn execute(&self) -> CQResult<SendableDataBlockStream>;
 }
