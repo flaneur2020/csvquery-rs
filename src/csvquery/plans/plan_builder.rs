@@ -1,5 +1,6 @@
 use crate::csvquery::data_sources::CsvDataSource;
 use crate::csvquery::error::CQResult;
+use crate::csvquery::streams::CsvReadOptions;
 use crate::csvquery::plans::{
     AggregatePlan, PlanExpr, PlanNode, PlanNodeRef, ProjectionPlan, ScanPlan, SelectionPlan,
 };
@@ -10,8 +11,8 @@ pub struct PlanBuilder {
 }
 
 impl PlanBuilder {
-    pub fn csv(path: &str) -> CQResult<Self> {
-        let data_source = Arc::new(CsvDataSource::try_new(path.clone())?);
+    pub fn csv(path: &str, read_options: &CsvReadOptions) -> CQResult<Self> {
+        let data_source = Arc::new(CsvDataSource::try_new(path, read_options)?);
         let plan = ScanPlan::new(data_source, vec![]);
         let plan_ref = Arc::new(PlanNode::Scan(plan));
         Ok(Self::new(plan_ref))

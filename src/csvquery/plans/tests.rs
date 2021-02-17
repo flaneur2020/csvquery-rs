@@ -1,12 +1,14 @@
 use crate::csvquery::error::CQResult;
 use crate::csvquery::plans::{BinaryExprOP, PlanBuilder, PlanExpr};
+use crate::csvquery::streams::CsvReadOptions;
 use std::sync::Arc;
 
 #[test]
 fn test_display_indent() -> CQResult<()> {
     use PlanExpr::*;
 
-    let plan = PlanBuilder::csv("./sample.csv")?
+    let csv_options = CsvReadOptions::new();
+    let plan = PlanBuilder::csv("./sample.csv", &csv_options)?
         .filter(BinaryExpr(
             BinaryExprOP::Eq,
             Arc::new(ColumnExpr("city".to_string())),
@@ -20,7 +22,7 @@ fn test_display_indent() -> CQResult<()> {
 
     let want = "Projection: Column(name), Column(age)\
               \n  Selection: (Column(city) eq LiteralString(beijing))\
-              \n    Scan: ./sample.csv";
+              \n    Scan CSV: ./sample.csv";
     let got = format!("{}", plan.display_indent());
     assert_eq!(want, got);
     Ok(())

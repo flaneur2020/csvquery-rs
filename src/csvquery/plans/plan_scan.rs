@@ -43,7 +43,7 @@ impl ScanPlan {
 
 impl fmt::Display for ScanPlan {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Scan: {}", self.data_source.name())?;
+        write!(f, "Scan {}", self.data_source.name())?;
         Ok(())
     }
 }
