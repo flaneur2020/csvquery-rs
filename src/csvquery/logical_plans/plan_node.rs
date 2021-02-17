@@ -1,6 +1,6 @@
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::{CQError, CQResult};
-use crate::csvquery::plans::{
+use crate::csvquery::logical_plans::{
     AggregatePlan, IndentVisitor, PlanVisitor, ProjectionPlan, ScanPlan, SelectionPlan,
 };
 use std::fmt;

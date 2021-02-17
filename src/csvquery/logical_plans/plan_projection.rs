@@ -1,6 +1,6 @@
 use crate::csvquery::data_types::{DataSchema, DataSchemaRef};
 use crate::csvquery::error::CQResult;
-use crate::csvquery::plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
+use crate::csvquery::logical_plans::{exprs_to_fields, PlanExpr, PlanNodeRef};
 use std::fmt;
 use std::sync::Arc;
 

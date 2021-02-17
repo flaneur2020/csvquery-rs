@@ -1,7 +1,7 @@
 use crate::csvquery::data_sources::CsvDataSource;
 use crate::csvquery::error::CQResult;
 use crate::csvquery::streams::CsvReadOptions;
-use crate::csvquery::plans::{
+use crate::csvquery::logical_plans::{
     AggregatePlan, PlanExpr, PlanNode, PlanNodeRef, ProjectionPlan, ScanPlan, SelectionPlan,
 };
 use std::sync::Arc;

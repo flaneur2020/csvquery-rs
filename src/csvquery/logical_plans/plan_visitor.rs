@@ -1,4 +1,4 @@
-use crate::csvquery::plans::PlanNode;
+use crate::csvquery::logical_plans::PlanNode;
 use std::fmt;
 
 /// Trait that implements the Visitor pattern for a depth

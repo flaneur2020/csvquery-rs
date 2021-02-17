@@ -1,6 +1,6 @@
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::CQResult;
-use crate::csvquery::plans::{PlanExpr, PlanNodeRef};
+use crate::csvquery::logical_plans::{PlanExpr, PlanNodeRef};
 use std::fmt;
 
 #[derive(Clone)]

@@ -1,5 +1,5 @@
 use crate::csvquery::error::CQResult;
-use crate::csvquery::plans::{BinaryExprOP, PlanBuilder, PlanExpr};
+use crate::csvquery::logical_plans::{BinaryExprOP, PlanBuilder, PlanExpr};
 use crate::csvquery::streams::CsvReadOptions;
 use std::sync::Arc;
 
