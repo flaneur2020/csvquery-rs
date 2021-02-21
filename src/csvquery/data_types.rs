@@ -1,5 +1,6 @@
 use crate::csvquery::error::CQResult;
 use arrow;
+use arrow::array::ArrayRef;
 
 pub type DataType = arrow::datatypes::DataType;
 

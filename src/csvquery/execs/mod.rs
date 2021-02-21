@@ -3,6 +3,7 @@ mod exec_merge;
 mod exec_csv;
 mod exec_transform;
 mod pipeline;
+mod expressions;
 
 pub use exec::{Execution, ExecutionRef};
 pub use exec_merge::MergeExecution;
