@@ -1,4 +1,4 @@
-use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
+use crate::csvquery::data_types::{RecordBatch, DataSchemaRef};
 use crate::csvquery::error::{CQError, CQResult};
 use arrow::csv;
 use futures::{Stream, StreamExt};
@@ -61,20 +61,18 @@ impl CsvStream {
 }
 
 impl Stream for CsvStream {
-    type Item = CQResult<DataBlock>;
+    type Item = CQResult<RecordBatch>;
 
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,
         _cx: &mut Context<'_>,
     ) -> Poll<Option<Self::Item>> {
         let o = self.reader.next();
-        if o.is_none() {
-            return Poll::Ready(None);
-        }
 
-        Poll::Ready(Some(match o.unwrap() {
-            Ok(batch) => DataBlock::from_arrow_record_batch(&batch),
-            Err(err) => Err(CQError::from(err)),
-        }))
+        Poll::Ready(o.map(|r| 
+            r.or_else(|err| 
+                Err(CQError::from(err))
+            )
+        ))
     }
 }

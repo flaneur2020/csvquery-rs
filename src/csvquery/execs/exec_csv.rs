@@ -1,5 +1,5 @@
-use crate::csvquery::streams::{ChannelStream, CsvStream, CsvReadOptions, SendableDataBlockStream};
-use crate::csvquery::data_types::{DataBlock, DataSchemaRef};
+use crate::csvquery::streams::{ChannelStream, CsvStream, CsvReadOptions, SendableRecordBatchStream};
+use crate::csvquery::data_types::{RecordBatch, DataSchemaRef};
 use crate::csvquery::data_sources::{DataSource, DataSourceRef};
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef};
@@ -45,7 +45,7 @@ impl Execution for CsvExecution {
         ))
     }
 
-    async fn execute(&self) -> CQResult<SendableDataBlockStream> {
+    async fn execute(&self) -> CQResult<SendableRecordBatchStream> {
         CsvStream::try_new(
             &self.filename,
             self.schema.clone(),

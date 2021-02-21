@@ -1,5 +1,5 @@
-use crate::csvquery::streams::{ChannelStream, SendableDataBlockStream};
-use crate::csvquery::data_types::DataBlock;
+use crate::csvquery::streams::{ChannelStream, SendableRecordBatchStream};
+use crate::csvquery::data_types::RecordBatch;
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;
@@ -31,7 +31,7 @@ impl Execution for MergeExecution {
         self.inputs.clone()
     }
 
-    async fn execute(&self) -> CQResult<SendableDataBlockStream> {
+    async fn execute(&self) -> CQResult<SendableRecordBatchStream> {
         let num_inputs = self.inputs.len();
         match num_inputs {
             0 => Err(CQError::Internal(
@@ -39,7 +39,7 @@ impl Execution for MergeExecution {
             )),
             1 => self.inputs[0].execute().await,
             _ => {
-                let (sender, receiver) = mpsc::channel::<CQResult<DataBlock>>(num_inputs);
+                let (sender, receiver) = mpsc::channel::<CQResult<RecordBatch>>(num_inputs);
                 for i in 0..num_inputs {
                     let input = self.inputs[i].clone();
                     let sender = sender.clone();

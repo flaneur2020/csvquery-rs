@@ -1,24 +1,24 @@
-use crate::csvquery::data_types::DataBlock;
-use crate::csvquery::streams::SendableDataBlockStream;
+use crate::csvquery::data_types::RecordBatch;
+use crate::csvquery::streams::SendableRecordBatchStream;
 use crate::csvquery::error::CQResult;
 use futures::{Stream, StreamExt};
 use std::task::{Context, Poll};
 
-pub type TransformFunc = fn(DataBlock) -> CQResult<DataBlock>;
+pub type TransformFunc = fn(RecordBatch) -> CQResult<RecordBatch>;
 
 pub struct TransformedStream {
-    input: SendableDataBlockStream,
+    input: SendableRecordBatchStream,
     func: TransformFunc,
 }
 
 impl TransformedStream {
-    pub fn new(input: SendableDataBlockStream, func: TransformFunc) -> Self {
+    pub fn new(input: SendableRecordBatchStream, func: TransformFunc) -> Self {
         Self { input, func }
     }
 }
 
 impl Stream for TransformedStream {
-    type Item = CQResult<DataBlock>;
+    type Item = CQResult<RecordBatch>;
 
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,

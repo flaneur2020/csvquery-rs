@@ -1,4 +1,4 @@
-use crate::csvquery::streams::{SendableDataBlockStream, TransformFunc, TransformedStream};
+use crate::csvquery::streams::{SendableRecordBatchStream, TransformFunc, TransformedStream};
 use crate::csvquery::error::CQResult;
 use crate::csvquery::execs::{Execution, ExecutionRef};
 use async_trait::async_trait;
@@ -37,7 +37,7 @@ impl Execution for TransformExecution {
         Ok(())
     }
 
-    async fn execute(&self) -> CQResult<SendableDataBlockStream> {
+    async fn execute(&self) -> CQResult<SendableRecordBatchStream> {
         let p = self.input.clone().unwrap();
         Ok(Box::pin(TransformedStream::new(
             p.execute().await?,

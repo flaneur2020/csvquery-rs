@@ -1,4 +1,4 @@
-use crate::csvquery::streams::SendableDataBlockStream;
+use crate::csvquery::streams::SendableRecordBatchStream;
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef, MergeExecution};
 use std::sync::Arc;
@@ -70,7 +70,7 @@ impl Pipeline {
         Ok(())
     }
 
-    pub async fn execute(&mut self) -> CQResult<SendableDataBlockStream> {
+    pub async fn execute(&mut self) -> CQResult<SendableRecordBatchStream> {
         let last = self
             .executions
             .last()

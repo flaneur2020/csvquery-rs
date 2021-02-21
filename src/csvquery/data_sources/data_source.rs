@@ -1,4 +1,3 @@
-use crate::csvquery::streams::SendableDataBlockStream;
 use crate::csvquery::data_types::DataSchemaRef;
 use crate::csvquery::error::CQResult;
 use crate::csvquery::execs::ExecutionRef;

@@ -1,4 +1,4 @@
-use crate::csvquery::streams::SendableDataBlockStream;
+use crate::csvquery::streams::SendableRecordBatchStream;
 use crate::csvquery::error::CQResult;
 use async_trait::async_trait;
 use std::sync::Arc;
@@ -13,5 +13,5 @@ pub trait Execution: Sync + Send {
 
     fn inputs(&self) -> Vec<ExecutionRef>;
 
-    async fn execute(&self) -> CQResult<SendableDataBlockStream>;
+    async fn execute(&self) -> CQResult<SendableRecordBatchStream>;
 }
