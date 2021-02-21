@@ -4,3 +4,4 @@ mod error;
 mod streams;
 mod execs;
 mod logical_plans;
+mod scalar;
