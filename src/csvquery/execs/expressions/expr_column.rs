@@ -1,10 +1,10 @@
-use arrow::record_batch::RecordBatch;
-use crate::csvquery::execs::expressions::PhysicalExpr;
-use crate::csvquery::error::CQResult;
 use crate::csvquery::data_types::ColumnVector;
+use crate::csvquery::error::CQResult;
+use crate::csvquery::execs::expressions::PhysicalExpr;
+use arrow::record_batch::RecordBatch;
 
 pub struct Column {
-    name: String
+    name: String,
 }
 
 impl Column {
@@ -17,6 +17,8 @@ impl Column {
 
 impl PhysicalExpr for Column {
     fn evaluate(&self, batch: &RecordBatch) -> CQResult<ColumnVector> {
-        Ok(ColumnVector::Array(batch.column(batch.schema().index_of(&self.name)?).clone()))
+        Ok(ColumnVector::Array(
+            batch.column(batch.schema().index_of(&self.name)?).clone(),
+        ))
     }
 }

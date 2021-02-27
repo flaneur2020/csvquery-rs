@@ -1,6 +1,6 @@
-use crate::csvquery::streams::{SendableRecordBatchStream, TransformFunc, TransformedStream};
 use crate::csvquery::error::CQResult;
 use crate::csvquery::execs::{Execution, ExecutionRef};
+use crate::csvquery::streams::{SendableRecordBatchStream, TransformFunc, TransformedStream};
 use async_trait::async_trait;
 
 pub struct TransformExecution {

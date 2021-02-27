@@ -1,4 +1,4 @@
-use crate::csvquery::data_types::{RecordBatch, DataSchemaRef};
+use crate::csvquery::data_types::{DataSchemaRef, RecordBatch};
 use crate::csvquery::error::{CQError, CQResult};
 use arrow::csv;
 use futures::{Stream, StreamExt};
@@ -69,10 +69,6 @@ impl Stream for CsvStream {
     ) -> Poll<Option<Self::Item>> {
         let o = self.reader.next();
 
-        Poll::Ready(o.map(|r| 
-            r.or_else(|err| 
-                Err(CQError::from(err))
-            )
-        ))
+        Poll::Ready(o.map(|r| r.or_else(|err| Err(CQError::from(err)))))
     }
 }

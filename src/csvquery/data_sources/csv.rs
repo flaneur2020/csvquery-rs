@@ -1,8 +1,8 @@
 use crate::csvquery::data_sources::DataSource;
 use crate::csvquery::data_types::{DataField, DataSchema, DataSchemaRef};
-use crate::csvquery::execs::{ExecutionRef};
 use crate::csvquery::error::{CQError, CQResult};
-use crate::csvquery::streams::{CsvReadOptions};
+use crate::csvquery::execs::ExecutionRef;
+use crate::csvquery::streams::CsvReadOptions;
 use futures::{Stream, StreamExt};
 use std::pin::Pin;
 use std::sync::Arc;

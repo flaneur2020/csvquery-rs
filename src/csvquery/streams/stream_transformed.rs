@@ -1,6 +1,6 @@
 use crate::csvquery::data_types::RecordBatch;
-use crate::csvquery::streams::SendableRecordBatchStream;
 use crate::csvquery::error::CQResult;
+use crate::csvquery::streams::SendableRecordBatchStream;
 use futures::{Stream, StreamExt};
 use std::task::{Context, Poll};
 

@@ -1,5 +1,5 @@
-use crate::csvquery::streams::SendableRecordBatchStream;
 use crate::csvquery::error::CQResult;
+use crate::csvquery::streams::SendableRecordBatchStream;
 use async_trait::async_trait;
 use std::sync::Arc;
 

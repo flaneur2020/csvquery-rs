@@ -1,7 +1,7 @@
-use crate::csvquery::streams::{ChannelStream, SendableRecordBatchStream};
 use crate::csvquery::data_types::RecordBatch;
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef};
+use crate::csvquery::streams::{ChannelStream, SendableRecordBatchStream};
 use async_trait::async_trait;
 use futures::StreamExt;
 use tokio::sync::mpsc;

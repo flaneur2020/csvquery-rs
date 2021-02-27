@@ -1,8 +1,10 @@
-use crate::csvquery::streams::{ChannelStream, CsvStream, CsvReadOptions, SendableRecordBatchStream};
-use crate::csvquery::data_types::{RecordBatch, DataSchemaRef};
 use crate::csvquery::data_sources::{DataSource, DataSourceRef};
+use crate::csvquery::data_types::{DataSchemaRef, RecordBatch};
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef};
+use crate::csvquery::streams::{
+    ChannelStream, CsvReadOptions, CsvStream, SendableRecordBatchStream,
+};
 use async_trait::async_trait;
 use futures::StreamExt;
 
@@ -24,7 +26,7 @@ impl CsvExecution {
             filename: filename.to_string(),
             schema: schema,
             projection: projection,
-            read_options: read_options.clone()
+            read_options: read_options.clone(),
         }
     }
 }

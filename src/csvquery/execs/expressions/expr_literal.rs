@@ -1,7 +1,7 @@
-use crate::csvquery::scalar::ScalarValue;
 use crate::csvquery::data_types::ColumnVector;
 use crate::csvquery::error::CQResult;
 use crate::csvquery::execs::expressions::PhysicalExpr;
+use crate::csvquery::scalar::ScalarValue;
 use arrow::record_batch::RecordBatch;
 
 pub struct Literal {

@@ -1,6 +1,6 @@
-use crate::csvquery::streams::SendableRecordBatchStream;
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::{Execution, ExecutionRef, MergeExecution};
+use crate::csvquery::streams::SendableRecordBatchStream;
 use std::sync::Arc;
 
 pub type Pipe = Vec<ExecutionRef>;
