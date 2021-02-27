@@ -25,6 +25,8 @@ impl BinaryExpr {
     }
 }
 
+// macro_rules! binary_array_op {}
+
 impl PhysicalExpr for BinaryExpr {
     fn evaluate(&self, batch: &RecordBatch) -> CQResult<ColumnVector> {
         let ll = self.left.evaluate(batch)?;
