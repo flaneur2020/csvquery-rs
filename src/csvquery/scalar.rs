@@ -40,7 +40,7 @@ macro_rules! scalar_value_to_array {
     ($o:expr, $size:expr, $ARRAY_TYPE:ident, $SCALAR:ident) => {
         match $o {
             Some(v) => Arc::new($ARRAY_TYPE::from_iter_values(repeat(*v).take($size))),
-            None => new_null_array(&DataType::$SCALAR, $size),
+            None => new_null_array(&DataType::$SCALAR.into(), $size),
         }
     };
 }
@@ -78,7 +78,7 @@ impl ScalarValue {
             ScalarValue::UInt64(o) => scalar_value_to_array!(o, size, UInt64Array, UInt64),
             ScalarValue::Utf8(o) => match o {
                 Some(v) => Arc::new(StringArray::from_iter_values(repeat(v).take(size))),
-                None => new_null_array(&DataType::Utf8, size),
+                None => new_null_array(&DataType::Utf8.into(), size),
             },
         }
     }

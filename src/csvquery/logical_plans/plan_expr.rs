@@ -67,11 +67,11 @@ impl PlanExpr {
             }
 
             PlanExpr::LiteralStringExpr(str) => {
-                Ok(DataField::new(&(str.clone()), DataType::Utf8, false))
+                Ok(DataField::new(&(str.clone()), DataType::Utf8.into(), false))
             }
 
             PlanExpr::LiteralLongExpr(n) => {
-                Ok(DataField::new(&(n.clone()), DataType::Int64, false))
+                Ok(DataField::new(&(n.clone()), DataType::Int64.into(), false))
             }
 
             PlanExpr::BinaryExpr(op, left, right) => {
@@ -99,7 +99,7 @@ fn convert_binary_expr_to_field(
 
     match op {
         Eq | Neq | Gt | Gte | Lt | Lte | And | Or => {
-            Ok(DataField::new(&field_name, DataType::Boolean, false))
+            Ok(DataField::new(&field_name, DataType::Boolean.into(), false))
         }
         Add | Sub | Mult | Div | Mod => {
             let data_type = left.to_field(input)?.data_type().clone();
