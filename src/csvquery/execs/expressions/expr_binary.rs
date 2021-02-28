@@ -1,7 +1,9 @@
-use crate::csvquery::data_types::ColumnVector;
+use crate::csvquery::data_types::{ColumnVector, DataArrayRef};
+use crate::csvquery::scalar::ScalarValue;
 use crate::csvquery::error::{CQError, CQResult};
 use crate::csvquery::execs::expressions::{PhysicalExpr, PhysicalExprRef};
 use crate::csvquery::logical_plans::BinaryExprOP;
+use arrow::compute::kernels::comparison::{eq, gt, gt_eq, lt, lt_eq, neq};
 use arrow::record_batch::RecordBatch;
 use std::sync::Arc;
 
@@ -21,7 +23,24 @@ impl BinaryExpr {
     }
 
     fn evaluate_eq(&self, l: &ColumnVector, r: &ColumnVector) -> CQResult<ColumnVector> {
-        Err(CQError::NotImplemented("Not Implemented".to_string()))
+        match (l, r) {
+            (ColumnVector::Array(ll), ColumnVector::Array(rr)) => {
+                // Ok(ColumnVector::Array(Arc::new(eq(&*ll, &*rr)?)))
+                // match l.data_type() {
+                //
+                // }
+                Err(CQError::NotImplemented("Not Implemented".to_string()))
+            },
+            (ColumnVector::Scalar(ll), ColumnVector::Scalar(rr)) => {
+                Ok(ColumnVector::Scalar(ScalarValue::Boolean(Some(ll == rr))))
+            },
+            (ColumnVector::Array(_), ColumnVector::Scalar(_)) => {
+                Err(CQError::NotImplemented("Not Implemented".to_string()))
+            },
+            (ColumnVector::Scalar(_), ColumnVector::Array(_)) => {
+                Err(CQError::NotImplemented("Not Implemented".to_string()))
+            },
+        }
     }
 }
 

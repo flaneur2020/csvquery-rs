@@ -21,4 +21,11 @@ impl ColumnVector {
             ColumnVector::Scalar(s) => s.data_type(),
         }
     }
+
+    pub fn into_array(&self, size: usize) -> ArrayRef {
+        match self {
+            ColumnVector::Array(arr) => arr.clone(),
+            ColumnVector::Scalar(scalar) => scalar.into_array(size),
+        }
+    }
 }
