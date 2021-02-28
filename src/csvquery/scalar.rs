@@ -1,4 +1,10 @@
-use crate::csvquery::data_types::DataType;
+use crate::csvquery::data_types::{DataArrayRef, DataType};
+use arrow::array::{
+    new_null_array, BooleanArray, Float32Array, Float64Array, Int8Array, Int16Array, Int32Array, Int64Array,
+    StringArray, UInt8Array, UInt16Array, UInt32Array, UInt64Array,
+};
+use std::iter::repeat;
+use std::sync::Arc;
 
 /// Represents a dynamically typed, nullable single value.
 /// This is the single-valued counter-part of arrow’s `Array`.
@@ -30,6 +36,15 @@ pub enum ScalarValue {
     Utf8(Option<String>),
 }
 
+macro_rules! scalar_value_to_array {
+    ($o:expr, $size:expr, $ARRAY_TYPE:ident, $SCALAR:ident) => {
+        match $o {
+            Some(v) => Arc::new($ARRAY_TYPE::from_iter_values(repeat(*v).take($size))),
+            None => new_null_array(&DataType::$SCALAR, $size),
+        }
+    };
+}
+
 impl ScalarValue {
     pub fn data_type(&self) -> DataType {
         match self {
@@ -45,6 +60,26 @@ impl ScalarValue {
             ScalarValue::UInt32(_) => DataType::UInt32,
             ScalarValue::UInt64(_) => DataType::UInt64,
             ScalarValue::Utf8(_) => DataType::Utf8,
+        }
+    }
+
+    pub fn into_array(&self, size: usize) -> DataArrayRef {
+        match self {
+            ScalarValue::Boolean(o) => Arc::new(BooleanArray::from(vec![*o; size])) as DataArrayRef,
+            ScalarValue::Float32(o) => scalar_value_to_array!(o, size, Float32Array, Float32),
+            ScalarValue::Float64(o) => scalar_value_to_array!(o, size, Float64Array, Float64),
+            ScalarValue::Int8(o) => scalar_value_to_array!(o, size, Int8Array, Int8),
+            ScalarValue::Int16(o) => scalar_value_to_array!(o, size, Int16Array, Int16),
+            ScalarValue::Int32(o) => scalar_value_to_array!(o, size, Int32Array, Int32),
+            ScalarValue::Int64(o) => scalar_value_to_array!(o, size, Int64Array, Int64),
+            ScalarValue::UInt8(o) => scalar_value_to_array!(o, size, UInt8Array, UInt8),
+            ScalarValue::UInt16(o) => scalar_value_to_array!(o, size, UInt16Array, UInt16),
+            ScalarValue::UInt32(o) => scalar_value_to_array!(o, size, UInt32Array, UInt32),
+            ScalarValue::UInt64(o) => scalar_value_to_array!(o, size, UInt64Array, UInt64),
+            ScalarValue::Utf8(o) => match o {
+                Some(v) => Arc::new(StringArray::from_iter_values(repeat(v).take(size))),
+                None => new_null_array(&DataType::Utf8, size),
+            },
         }
     }
 }
