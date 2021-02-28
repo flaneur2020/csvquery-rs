@@ -1,13 +1,12 @@
-use std::fmt;
 use crate::csvquery::scalar::ScalarValue;
 use arrow;
-use arrow::array::ArrayRef;
+use std::fmt;
 
 // pub type DataType = arrow::datatypes::DataType;
 pub type DataField = arrow::datatypes::Field;
 pub type DataSchemaRef = arrow::datatypes::SchemaRef;
 pub type DataSchema = arrow::datatypes::Schema;
-pub type DataArrayRef = arrow::array::ArrayRef;
+pub type ArrayRef = arrow::array::ArrayRef;
 pub type RecordBatch = arrow::record_batch::RecordBatch;
 
 // a sub set of arrow's DataType

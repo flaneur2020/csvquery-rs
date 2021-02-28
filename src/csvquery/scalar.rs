@@ -1,7 +1,7 @@
-use crate::csvquery::data_types::{DataArrayRef, DataType};
+use crate::csvquery::data_types::{ArrayRef, DataType};
 use arrow::array::{
-    new_null_array, BooleanArray, Float32Array, Float64Array, Int8Array, Int16Array, Int32Array, Int64Array,
-    StringArray, UInt8Array, UInt16Array, UInt32Array, UInt64Array,
+    new_null_array, BooleanArray, Float32Array, Float64Array, Int16Array, Int32Array, Int64Array,
+    Int8Array, StringArray, UInt16Array, UInt32Array, UInt64Array, UInt8Array,
 };
 use std::iter::repeat;
 use std::sync::Arc;
@@ -63,9 +63,9 @@ impl ScalarValue {
         }
     }
 
-    pub fn into_array(&self, size: usize) -> DataArrayRef {
+    pub fn into_array(&self, size: usize) -> ArrayRef {
         match self {
-            ScalarValue::Boolean(o) => Arc::new(BooleanArray::from(vec![*o; size])) as DataArrayRef,
+            ScalarValue::Boolean(o) => Arc::new(BooleanArray::from(vec![*o; size])) as ArrayRef,
             ScalarValue::Float32(o) => scalar_value_to_array!(o, size, Float32Array, Float32),
             ScalarValue::Float64(o) => scalar_value_to_array!(o, size, Float64Array, Float64),
             ScalarValue::Int8(o) => scalar_value_to_array!(o, size, Int8Array, Int8),
